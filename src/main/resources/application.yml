@@ -16,5 +16,5 @@ spring:
     password: ${hotelbooking.database.password}
 
 info:
-  version: @version@
+  version: 0.1.0
   os: ${os.name}

@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ActiveProfiles({"test", "nosecurity"})
+@ActiveProfiles({"test"})
 @SpringBootTest
 @AutoConfigureMockMvc
 public class WebViewControllerIT {
@@ -24,8 +24,22 @@ public class WebViewControllerIT {
 
     @Test
     public void shouldReturnMainPage() throws Exception {
-        mockMvc.perform(get("/"))
+        shouldReturnPageWith("", "This is some text.");
+    }
+
+    @Test
+    public void shouldReturnReservationFormPage() throws Exception {
+        shouldReturnPageWith(WebViewController.PAGE_FORM, "What a cool reservation form!");
+    }
+
+    @Test
+    public void shouldReturnReservationShowPage() throws Exception {
+        shouldReturnPageWith(WebViewController.PAGE_SHOW, "This shows the sent reservation.");
+    }
+
+    private void shouldReturnPageWith(String requestPath, String expectedExcerpt) throws Exception {
+        mockMvc.perform(get("/" + requestPath))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("This is some text.")));
+                .andExpect(content().string(containsString(expectedExcerpt)));
     }
 }

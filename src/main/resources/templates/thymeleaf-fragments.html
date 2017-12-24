@@ -5,10 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta HTTP-EQUIV="expires" CONTENT="0"/>
     <link rel="stylesheet" data-th-href="@{/css/bootstrap-bootswatch-theme-lumen.min.css}"/>
-    <script src="${/js/jquery-3.2.1-min.js}"></script>
-    <script src="${/js/bootstrap-min.js}"></script>
+    <script data-th-src="@{/js/jquery-3.2.1.min.js}"></script>
+    <script data-th-src="@{/js/bootstrap.min.js}"></script>
+    <script data-th-src="@{/js/app.js}"></script>
+    <style type="text/css">
+        body { padding-bottom: 70px; }
+    </style>
 </head>
 <body>
-  <p>This page is actually never shown, it just exists as a thymeleaf fragment source.</p>
+    <p>This page is actually never shown, it just exists as a thymeleaf fragment source.</p>
+
+    <nav data-th-fragment="navigation-bar" class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <span class="navbar-brand" data-th-text="#{navbar.title}">navbar.title</span>
+            </div>
+            <p class="navbar-text">&nbsp;&nbsp;&nbsp;</p>
+            <ul class="nav navbar-nav">
+                <li data-th-class="${currentpage=='main'}?'active noclick':''"><a href="/" data-th-text="#{navbar.main}">navbar.main</a></li>
+                <li data-th-class="${currentpage=='reservation-form'}?'active noclick':'disabled noclick'"><a href="#" data-th-text="#{navbar.reservation-form}">navbar.reservation-form</a></li>
+                <li data-th-class="${currentpage=='reservation-show'}?'active noclick':'disabled noclick'"><a href="#" data-th-text="#{navbar.reservation-show}">navbar.reservation-show</a></li>
+            </ul>
+            <span data-th-switch="${currentpage}">
+                <ul data-th-case="'main'" class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <img data-th-src="@{/images/lang/}+#{lang.flag}"/>
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/?lang=en"><img data-th-src="@{/images/lang/}+'flag_en.gif'"/><span data-th-text="#{lang.en}" style="padding-left:10px"></span></a></li>
+                            <li><a href="/?lang=de"><img data-th-src="@{/images/lang/}+'flag_de.gif'"/><span data-th-text="#{lang.de}" style="padding-left:10px"></span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul data-th-case="*" class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <img data-th-src="@{/images/lang/}+#{lang.flag}"/>
+                            <span class="caret" style="opacity: 0.0"></span></a>
+                    </li>
+                </ul>
+            </span>
+        </div>
+    </nav>
+
+    <nav data-th-fragment="page-footer" class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <span class="navbar-brand" data-th-text="#{page.footer}">page.footer</span>
+            </div>
+        </div>
+    </nav>
 </body>
 </html>

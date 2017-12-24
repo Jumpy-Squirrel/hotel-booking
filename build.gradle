@@ -45,6 +45,7 @@ jacoco {
 check.dependsOn jacocoTestReport
 
 dependencies {
+    compileOnly('org.projectlombok:lombok')
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-security')
@@ -75,5 +76,18 @@ bootRepackage {
 }
 
 processResources {
-    filter(ReplaceTokens, tokens: ['version': version])
+    def sourceFiles = source.files
+    from(sourceFiles) {
+        include '**/*.yml'
+        filter(ReplaceTokens, tokens: ['version': version])
+    }
+    from(sourceFiles) {
+        exclude '**/*.yml'
+    }
+}
+
+bootRun {
+    doFirst {
+        jvmArgs = ["-Dspring.profiles.active=dev"]
+    }
 }
