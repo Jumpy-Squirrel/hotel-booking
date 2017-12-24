@@ -1,0 +1,78 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+buildscript {
+	ext {
+		springBootVersion = '1.5.9.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.owasp:dependency-check-gradle:+")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'jacoco'
+apply plugin: 'checkstyle'
+apply plugin: 'org.owasp.dependencycheck'
+
+group project.group
+version project.version
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+	mavenCentral()
+    // for jacoco snapshots
+    maven() {
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+
+jacoco {
+	// supports filtering out @generated code from lombok
+	toolVersion = '0.7.10-SNAPSHOT'
+}
+
+check.dependsOn jacocoTestReport
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	runtime('mysql:mysql-connector-java')
+	compileOnly('org.springframework.boot:spring-boot-configuration-processor')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.springframework.security:spring-security-test')
+}
+
+jar {
+    manifest {
+        attributes "Description": project.description,
+                "Version": project.version
+    }
+}
+
+checkstyle {
+    toolVersion = "8.5"
+    configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+}
+
+bootRepackage {
+    executable = true
+    excludeDevtools = true
+}
+
+processResources {
+    filter(ReplaceTokens, tokens: ['version': version])
+}
