@@ -8,11 +8,66 @@
 
 <div class="container-fluid">
     <link data-th-replace="thymeleaf-fragments :: navigation-bar"/>
-    <div class="row">
-        <div class="col-xs-12">
-            <p>What a cool reservation form!</p>
-        </div>
+    <div class="container-fluid">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <p class="col-xs-12" data-th-text="#{form.heading}">form.heading</p>
+            </div>
+            <div class="form-group">
+                <input type="hidden" id="size_initial" name="roomsizeinitial" data-th-value="${roomsize}"/>
+                <p class="control-label col-xs-2" data-th-text="#{form.size}">form.size</p>
+                <div class="col-xs-1"></div>
+                <label id="size_single_label" class="btn btn-primary col-xs-3">
+                    <input type="radio" id="size_single" name="roomsize" value="1"/>
+                    &nbsp;
+                    <span data-th-text="#{form.size.single}" data-th-remove="tag">form.size.single</span>
+                </label>
+                <label id="size_double_label" class="btn btn-primary col-xs-3">
+                    <input type="radio" id="size_double" name="roomsize" value="2"/>
+                    &nbsp;
+                    <span data-th-text="#{form.size.double}" data-th-remove="tag">form.size.double</span>
+                </label>
+                <label id="size_triple_label" class="btn btn-primary col-xs-3">
+                    <input type="radio" id="size_triple" name="roomsize" value="3"/>
+                    &nbsp;
+                    <span data-th-text="#{form.size.triple}" data-th-remove="tag">form.size.triple</span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-2" data-th-text="#{form.nick}" for="nick1">form.nick</label>
+                <div class="col-xs-1"></div>
+                <div class="col-xs-3 firstpersoncolumn">
+                    <input data-th-title="#{form.nick1}" class="form-control firstperson" id="nick1" name="nick1" type="text" data-th-placeholder="#{form.nick1}" data-th-value="${nick1}"/>
+                </div>
+                <div class="col-xs-3 secondpersoncolumn">
+                    <input data-th-title="#{form.nick2}" class="form-control secondperson" id="nick2" name="nick2" type="text" data-th-placeholder="#{form.nick2}" data-th-value="${nick2}"/>
+                </div>
+                <div class="col-xs-3 thirdpersoncolumn">
+                    <input data-th-title="#{form.nick3}"  class="form-control thirdperson" id="nick3" name="nick3" type="text" data-th-placeholder="#{form.nick3}" data-th-value="${nick3}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-xs-2" data-th-text="#{form.email}" for="email1">form.email</label>
+                <div class="col-xs-1"></div>
+                <div class="col-xs-3 firstpersoncolumn">
+                    <input data-th-title="#{form.email1}" class="form-control firstperson" id="email1" name="email1" type="email" data-th-placeholder="#{form.email1}" data-th-value="${email1}"/>
+                </div>
+                <div class="col-xs-3 secondpersoncolumn">
+                    <input data-th-title="#{form.email2}" class="form-control secondperson" id="email2" name="email2" type="email" data-th-placeholder="#{form.email2}" data-th-value="${email2}"/>
+                </div>
+                <div class="col-xs-3 thirdpersoncolumn">
+                    <input data-th-title="#{form.email3}"  class="form-control thirdperson" id="email3" name="email3" type="email" data-th-placeholder="#{form.email3}" data-th-value="${email3}"/>
+                </div>
+            </div>
+
+            <div class="checkbox">
+                <label><input type="checkbox"/> Remember me</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
     </div>
+
+
     <div class="row">
         <div class="col-xs-12">
             <noscript>

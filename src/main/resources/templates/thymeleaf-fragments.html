@@ -22,7 +22,7 @@
             </div>
             <p class="navbar-text">&nbsp;&nbsp;&nbsp;</p>
             <ul class="nav navbar-nav">
-                <li data-th-class="${currentpage=='main'}?'active noclick':''"><a href="/" data-th-text="#{navbar.main}">navbar.main</a></li>
+                <li data-th-class="${currentpage=='main'}?'active noclick':''"><a data-th-href="@{/}" data-th-text="#{navbar.main}">navbar.main</a></li>
                 <li data-th-class="${currentpage=='reservation-form'}?'active noclick':'disabled noclick'"><a href="#" data-th-text="#{navbar.reservation-form}">navbar.reservation-form</a></li>
                 <li data-th-class="${currentpage=='reservation-show'}?'active noclick':'disabled noclick'"><a href="#" data-th-text="#{navbar.reservation-show}">navbar.reservation-show</a></li>
             </ul>
@@ -33,8 +33,8 @@
                             <img data-th-src="@{/images/lang/}+#{lang.flag}"/>
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/?lang=en"><img data-th-src="@{/images/lang/}+'flag_en.gif'"/><span data-th-text="#{lang.en}" style="padding-left:10px"></span></a></li>
-                            <li><a href="/?lang=de"><img data-th-src="@{/images/lang/}+'flag_de.gif'"/><span data-th-text="#{lang.de}" style="padding-left:10px"></span></a></li>
+                            <li><a data-th-href="@{/?lang=en}"><img data-th-src="@{/images/lang/}+'flag_en.gif'"/><span data-th-text="#{lang.en}" style="padding-left:10px"></span></a></li>
+                            <li><a data-th-href="@{/?lang=de}"><img data-th-src="@{/images/lang/}+'flag_de.gif'"/><span data-th-text="#{lang.de}" style="padding-left:10px"></span></a></li>
                         </ul>
                     </li>
                 </ul>

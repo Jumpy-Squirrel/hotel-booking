@@ -29,7 +29,7 @@ public class WebViewControllerIT {
 
     @Test
     public void shouldReturnReservationFormPage() throws Exception {
-        shouldReturnPageWith(WebViewController.PAGE_FORM, "What a cool reservation form!");
+        shouldReturnPageWith(WebViewController.PAGE_FORM, "booking request on your behalf");
     }
 
     @Test

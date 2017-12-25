@@ -4,6 +4,7 @@ security:
 
 server:
   port: 8081
+  context-path: /hotel-booking
   ssl:
     enabled: false
 
