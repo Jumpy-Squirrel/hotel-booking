@@ -55,8 +55,57 @@ function setInitialRoomsize() {
     changedRoomsize(initialSize);
 }
 
+function changedRoomtype(value) {
+    var maxType = $('#roomtype_max').val();
+    for (var i = 1; i <= maxType; i++) {
+        activateLabel('#roomtype'+i+'button', i == value);
+    }
+}
+
+function switchActiveOnRoomtype() {
+    $('input[type=radio][name=roomtype]').change(function() {
+         changedRoomtype(this.value);
+    });
+}
+
+function setInitialRoomtype() {
+    var initialType = $('#roomtype_initial').val();
+    $('#roomtype'+initialType).prop("checked", true);
+    changedRoomtype(initialType);
+}
+
+function initializeDatepicker() {
+    var datepickerLanguage = $('#languagecode').attr('class');
+    if (datepickerLanguage === 'en') {
+        datepickerLanguage = 'en-GB';
+    }
+    var dateFormat = $('#dateformat').val();
+    var d1s = $('#date1s').val();
+    var d1e = $('#date1e').val();
+    var d2s = $('#date2s').val();
+    var d2e = $('#date2e').val();
+    $('#arrival').datepicker({
+        language: datepickerLanguage,
+        format: dateFormat,
+        startDate: d1s,
+        endDate: d1e
+    });
+    $('#departure').datepicker({
+        language: datepickerLanguage,
+        format: dateFormat,
+        startDate: d2s,
+        endDate: d2e
+    });
+}
+
 $(document).ready(function() {
     disableClickOnNavbarLinks();
+
     switchActiveOnRoomsize();
     setInitialRoomsize();
+
+    initializeDatepicker();
+
+    switchActiveOnRoomtype();
+    setInitialRoomtype();
 });
