@@ -6,6 +6,11 @@ import lombok.Data;
 public class ReservationDto {
     private int roomsize;
 
+    private String name1;
+    private String street1;
+    private String city1;
+    private String email1;
+
     private String name2;
     private String street2;
     private String city2;
@@ -25,4 +30,11 @@ public class ReservationDto {
     private String comments;
 
     private String understood;
+
+    public void overridePersonalInfo(PersonalInfoDto info) {
+        name1 = info.getName();
+        street1 = info.getStreet();
+        city1 = info.getCity();
+        email1 = info.getEmail();
+    }
 }

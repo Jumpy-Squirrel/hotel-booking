@@ -1,6 +1,7 @@
 package info.rexis.hotelbooking.web;
 
 import info.rexis.hotelbooking.services.ReservationService;
+import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,9 @@ public class WebViewController {
 
     @PostMapping(PAGE_SHOW)
     public String showReservationShowPage(@ModelAttribute("reservation") ReservationDto reservation, Model model) {
-        setupForm(model);
+        // todo add id and token from session
+        String email = reservationService.constructEmail(reservation, PersonalInfoRequestDto.builder().build());
+        model.addAttribute("email", email);
         return showPage(PAGE_SHOW, model);
     }
 
