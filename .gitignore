@@ -1,6 +1,7 @@
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
+tomcat-workdir/**
 
 ### STS ###
 .apt_generated

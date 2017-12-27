@@ -3,3 +3,5 @@ hotelbooking:
     url: jdbc:mysql://localhost/ef24rooms?useSSL=false
     username: ef-rooms
     password: fgI3piOIPzevQo5YKsoZ
+  tomcat:
+    workdir: tomcat-workdir

@@ -7,6 +7,11 @@ server:
   context-path: /hotel-booking
   ssl:
     enabled: false
+  tomcat:
+    basedir: ${hotelbooking.tomcat.workdir}
+    accesslog:
+      enabled: true
+      pattern: '%t %a "%r" %s (%D ms)'
 
 spring:
   application:
