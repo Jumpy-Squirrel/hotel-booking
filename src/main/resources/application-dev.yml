@@ -1,3 +1,27 @@
 hotelbooking:
   tomcat:
     workdir: tomcat-workdir
+
+hotelinfo:
+  roomtypes:
+    - name: Concert Hall
+      value: hall
+      description: a concert hall built in stone
+      infolink: http://localhost/concerthall
+      price1: 84.00
+      price2: 99.00
+      price3: 104.00
+    - name: Stadium
+      value: stadium
+      description: a stadium out in the open
+      infolink: http://localhost/stadium
+      price1: 85.00
+      price2: 100.00
+      price3: 105.00
+    - name: Shack in the Wilderness
+      value: shack
+      description: a wooden shack, well, at least it's dry
+      infolink: http://localhost/shack
+      price1: 14.00
+      price2: 15.00
+      price3: 19.00

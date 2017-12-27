@@ -1,5 +1,9 @@
 package info.rexis.hotelbooking.web;
 
+import info.rexis.hotelbooking.services.ReservationService;
+import info.rexis.hotelbooking.services.dto.ReservationDto;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,16 +11,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 @Controller
 @RequestMapping("/")
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class WebViewController {
     public static final String PAGE_MAIN = "main";
     public static final String PAGE_FORM = "reservation-form";
     public static final String PAGE_SHOW = "reservation-show";
+
+    private ReservationService reservationService;
 
     @GetMapping
     public String showMainPage(Model model) {
@@ -31,24 +34,13 @@ public class WebViewController {
 
     @PostMapping(PAGE_SHOW)
     public String showReservationShowPage(@ModelAttribute("reservation") ReservationDto reservation, Model model) {
+        setupForm(model);
         return showPage(PAGE_SHOW, model);
     }
 
     private String showPage(String page, Model model) {
         model.addAttribute("currentpage", page);
         return page;
-    }
-
-    private Map<String, String> roominfo(String value, String name) {
-        Map<String, String> info = new HashMap<>();
-        info.put("name", name);
-        info.put("value", value);
-        info.put("description", "description for some room type");
-        info.put("infolink", "http://localhost/something");
-        info.put("price1", "$84.00");
-        info.put("price2", "$99.00");
-        info.put("price3", "$104.00");
-        return info;
     }
 
     private void setupForm(Model model) {
@@ -66,10 +58,6 @@ public class WebViewController {
         model.addAttribute("email2", "");
         model.addAttribute("email3", "");
         model.addAttribute("roomtype", "stadium");
-        model.addAttribute("roomtypes", Arrays.asList(
-                roominfo("hall", "Concert Hall"),
-                roominfo("stadium", "Stadium"),
-                roominfo("shack", "Shack in the Wilderness")
-        ));
+        model.addAttribute("roomtypes", reservationService.getHotelRoomProperties().toListOfMaps());
     }
 }

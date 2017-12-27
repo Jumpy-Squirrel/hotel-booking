@@ -1,4 +1,4 @@
-package info.rexis.hotelbooking.web;
+package info.rexis.hotelbooking.services.dto;
 
 import lombok.Data;
 
