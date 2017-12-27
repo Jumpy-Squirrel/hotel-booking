@@ -104,24 +104,88 @@ function initializeDatepicker() {
     });
 }
 
-function canSubmit() {
+function dateConv(str) {
+    var format = $('#dateformat').val();
+    var res = str;
+    if (format === 'mm/dd/yyyy') {
+        res = res.replace(/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/,"$3-$1-$2");
+    } else if (format === 'dd.mm.yyyy') {
+        res = res.replace(/([0-9]{2})\.([0-9]{2})\.([0-9]{4})/,"$3-$2-$1");
+    } else {
+        alert('unsupported date format: ' + format);
+        return '';
+    }
+    if (!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(res)) {
+        return '';
+    }
+    return res;
+}
+
+function fieldErrorMarker(surroundingSpanId, isOk) {
+    if (isOk) {
+        $(surroundingSpanId).removeClass('has-error');
+    } else {
+        $(surroundingSpanId).addClass('has-error');
+    }
+}
+
+function areDatesOk() {
+    var arrival_ok = true;
+    var departure_ok = true;
+    var messages = '';
+
+    var arrival = dateConv($('#arrival').val());
+    var arr_start = dateConv($('#date1s').val());
+    var arr_end = dateConv($('#date1e').val());
+    if (arrival === '' || arr_start === '' || arr_end === '') {
+        messages += "unparseable date for arrival\n";
+        arrival_ok = false;
+    }
+    var departure = dateConv($('#departure').val());
+    var dep_start = dateConv($('#date2s').val());
+    var dep_end = dateConv($('#date2e').val());
+    if (departure === '' || dep_start === '' || dep_end === '') {
+        messages += "unparseable date for departure\n";
+        departure_ok = false;
+    }
+    if (!(arrival < departure)) {
+        messages += "arrival must be before departure date\n";
+        arrival_ok = false;
+        departure_ok = false;
+    }
+    if ((arrival < arr_start) || (arr_end < arrival)) {
+        messages += "arrival date too early or too late\n";
+        arrival_ok = false;
+    }
+    if ((departure < dep_start) || (dep_end < departure)) {
+        messages += "departure date too early or too late\n";
+        departure_ok = false;
+    }
+    fieldErrorMarker('#arrival_error', arrival_ok);
+    fieldErrorMarker('#departure_error', departure_ok);
+    return arrival_ok && departure_ok;
+}
+
+function isDisclaimerAccepted() {
     return $('input[type=checkbox][name=understood]:checked').length;
+}
+
+function canSubmit() {
+    return areDatesOk()
+        && isDisclaimerAccepted();
 }
 
 function preventSubmitUntilConfirmed() {
     $("#form").submit(function(e) {
         if(!canSubmit()) {
-            alert("Please confirm that you have understood what you will need to do after clicking 'generate email'!");
-
             //stop the form from submitting
             return false;
         }
-
         return true;
     });
 }
 
-function changedConfirm() {
+function potentialChangeInSubmitState() {
     var submitbutton = $('#submitbutton');
     if (canSubmit()) {
         submitbutton.removeClass('btn-default');
@@ -134,9 +198,18 @@ function changedConfirm() {
     }
 }
 
-function switchSubmitActiveOnConfirm() {
+function switchSubmitOnConfirm() {
     $('input[type=checkbox][name=understood]').change(function() {
-        changedConfirm();
+        potentialChangeInSubmitState();
+    });
+}
+
+function switchSubmitOnChangedDates() {
+    $('#arrival').change(function() {
+        potentialChangeInSubmitState();
+    });
+    $('#departure').change(function () {
+        potentialChangeInSubmitState();
     });
 }
 
@@ -159,6 +232,7 @@ $(document).ready(function() {
 
         updatePrices();
 
-        switchSubmitActiveOnConfirm();
+        switchSubmitOnConfirm();
+        switchSubmitOnChangedDates();
     }
 });

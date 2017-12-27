@@ -45,6 +45,11 @@ Departure:   $r.departure
 #end##
 
 #end##
+#if ("$r.comments" != "")##
+Additional comments:
+$r.comments
+
+#end##
 Thank You!
 
 Best regards,

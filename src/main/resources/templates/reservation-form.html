@@ -12,9 +12,6 @@
     <div class="container-fluid">
         <form action="reservation-show" id="form" method="post" class="form-horizontal">
             <div class="form-group" id="formpage">
-                <p class="col-xs-12" data-th-text="#{form.heading}">form.heading</p>
-            </div>
-            <div class="form-group">
                 <input type="hidden" id="size_initial" name="roomsizeinitial" data-th-value="${roomsize}"/>
                 <p class="control-label col-xs-2" data-th-text="#{form.size}">form.size</p>
                 <div class="col-xs-1"></div>
@@ -104,9 +101,13 @@
                     <input type="hidden" id="date1e" name="date1e" data-th-value="#{form.date.latest}"/>
                     <input type="hidden" id="date2s" name="date2s" data-th-value="#{form.date.earliest}"/>
                     <input type="hidden" id="date2e" name="date2e" data-th-value="#{form.date.latest}"/>
-                    <input data-th-title="#{form.date.arrival}" class="form-control" id="arrival" name="arrival" type="text" data-th-placeholder="#{form.date.arrival}" data-th-value="${arrival}"/>
+                    <span class="has-error" id="arrival_error">
+                        <input data-th-title="#{form.date.arrival}" class="form-control" id="arrival" name="arrival" type="text" data-th-placeholder="#{form.date.arrival}" data-th-value="${arrival}"/>
+                    </span>
                     <span class="input-group-addon">-</span>
-                    <input data-th-title="#{form.date.departure}" class="form-control" id="departure" name="departure" type="text" data-th-placeholder="#{form.date.departure}" data-th-value="${departure}"/>
+                    <span class="has-error" id="departure_error">
+                        <input data-th-title="#{form.date.departure}" class="form-control" id="departure" name="departure" type="text" data-th-placeholder="#{form.date.departure}" data-th-value="${departure}"/>
+                    </span>
                 </div>
                 <div class="col-xs-4"></div>
             </div>

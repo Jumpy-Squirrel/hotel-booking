@@ -45,6 +45,11 @@ Abreise:    $r.departure
 #end##
 
 #end##
+#if ("$r.comments" != "")##
+Weitere Kommentare:
+$r.comments
+
+#end##
 Vielen Dank!
 
 Mit freundlichen Grüßen,
