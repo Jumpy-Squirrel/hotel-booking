@@ -31,9 +31,9 @@ public class HotelRoomProperties {
             info.put("value", value);
             info.put("description", description);
             info.put("infolink", infolink);
-            info.put("price1", String.format("%8.2f €", price1));
-            info.put("price2", String.format("%8.2f €", price2));
-            info.put("price3", String.format("%8.2f €", price3));
+            info.put("price1", String.format("%8.2f€", price1));
+            info.put("price2", String.format("%8.2f€", price2));
+            info.put("price3", String.format("%8.2f€", price3));
             return info;
         }
     }
