@@ -16,10 +16,6 @@ server:
 spring:
   application:
     name: rexis-hotel-booking
-  datasource:
-    url: ${hotelbooking.database.url}
-    username: ${hotelbooking.database.username}
-    password: ${hotelbooking.database.password}
 
 info:
   version: 0.1.0

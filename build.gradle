@@ -45,19 +45,29 @@ jacoco {
 
 check.dependsOn jacocoTestReport
 
+sourceSets {
+    // select this source set in your run configuration to be able to start the war in IntelliJ idea
+    ideaWorkaround {
+        java {
+            compileClasspath += sourceSets.main.compileClasspath
+            runtimeClasspath += sourceSets.main.runtimeClasspath
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+        }
+    }
+}
+
 dependencies {
     compileOnly('org.projectlombok:lombok')
 	compile('org.springframework.boot:spring-boot-starter-actuator')
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
     providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
-	runtime('mysql:mysql-connector-java')
 	compileOnly('org.springframework.boot:spring-boot-configuration-processor')
  	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.security:spring-security-test')
-    testCompile('com.h2database:h2')
+    ideaWorkaroundCompile('org.springframework.boot:spring-boot-starter-tomcat')
 }
 
 jar {
