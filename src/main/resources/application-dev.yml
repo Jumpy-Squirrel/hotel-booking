@@ -1,11 +1,7 @@
-hotelbooking:
-  tomcat:
-    workdir: tomcat-workdir
-
 hotelinfo:
   roomtypes:
     - name: Concert Hall
-      value: hall
+      value: standard
       description: a concert hall built in stone
       infolink: http://localhost/concerthall
       price1: 84.00

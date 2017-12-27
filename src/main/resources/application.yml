@@ -8,7 +8,7 @@ server:
   ssl:
     enabled: false
   tomcat:
-    basedir: ${hotelbooking.tomcat.workdir}
+    basedir: tomcat-workdir
     accesslog:
       enabled: true
       pattern: '%t %a "%r" %s (%D ms)'

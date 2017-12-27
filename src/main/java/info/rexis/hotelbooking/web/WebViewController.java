@@ -60,7 +60,7 @@ public class WebViewController {
         model.addAttribute("email1", "test@mailinator.com");
         model.addAttribute("email2", "");
         model.addAttribute("email3", "");
-        model.addAttribute("roomtype", "stadium");
+        model.addAttribute("roomtype", "standard");
         model.addAttribute("roomtypes", reservationService.getHotelRoomProperties().toListOfMaps());
     }
 }
