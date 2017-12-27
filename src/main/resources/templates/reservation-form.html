@@ -8,9 +8,10 @@
 
 <div class="container-fluid">
     <link data-th-replace="thymeleaf-fragments :: navigation-bar"/>
+
     <div class="container-fluid">
-        <form class="form-horizontal">
-            <div class="form-group">
+        <form action="reservation-show" id="form" method="post" class="form-horizontal">
+            <div class="form-group" id="formpage">
                 <p class="col-xs-12" data-th-text="#{form.heading}">form.heading</p>
             </div>
             <div class="form-group">
@@ -35,28 +36,15 @@
             </div>
             <div class="form-group">
                 <p class="col-xs-3"></p>
-                <p class="col-xs-3" data-th-text="#{form.person1}">form.person1</p>
-                <p class="col-xs-3" data-th-text="#{form.person2}">form.person2</p>
-                <p class="col-xs-3" data-th-text="#{form.person3}">form.person3</p>
+                <p class="col-xs-3"><b data-th-text="#{form.person1}">form.person1</b></p>
+                <p class="col-xs-3"><b data-th-text="#{form.person2}">form.person2</b></p>
+                <p class="col-xs-3"><b data-th-text="#{form.person3}">form.person3</b></p>
             </div>
             <div class="form-group">
-                <label class="control-label col-xs-2" data-th-text="#{form.nick}" for="nick1">form.nick</label>
+                <label class="control-label col-xs-2" data-th-text="#{form.name}" for="name2">form.name</label>
                 <div class="col-xs-1"></div>
                 <div class="col-xs-3 firstpersoncolumn">
-                    <input data-th-title="#{form.nick1}" class="form-control firstperson" id="nick1" name="nick1" type="text" data-th-placeholder="#{form.nick1}" data-th-value="${nick1}"/>
-                </div>
-                <div class="col-xs-3 secondpersoncolumn">
-                    <input data-th-title="#{form.nick2}" class="form-control secondperson" id="nick2" name="nick2" type="text" data-th-placeholder="#{form.nick2}" data-th-value="${nick2}"/>
-                </div>
-                <div class="col-xs-3 thirdpersoncolumn">
-                    <input data-th-title="#{form.nick3}"  class="form-control thirdperson" id="nick3" name="nick3" type="text" data-th-placeholder="#{form.nick3}" data-th-value="${nick3}"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-xs-2" data-th-text="#{form.name}" for="name1">form.name</label>
-                <div class="col-xs-1"></div>
-                <div class="col-xs-3 firstpersoncolumn">
-                    <input data-th-title="#{form.name1}" class="form-control firstperson" id="name1" name="name1" type="text" data-th-placeholder="#{form.name1}" data-th-value="${name1}"/>
+                    <p class="control-label" style="text-align: left" data-th-text="${name1}">name1</p>
                 </div>
                 <div class="col-xs-3 secondpersoncolumn">
                     <input data-th-title="#{form.name2}" class="form-control secondperson" id="name2" name="name2" type="text" data-th-placeholder="#{form.name2}" data-th-value="${name2}"/>
@@ -66,10 +54,10 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-xs-2" data-th-text="#{form.street}" for="street1">form.street</label>
+                <label class="control-label col-xs-2" data-th-text="#{form.street}" for="street2">form.street</label>
                 <div class="col-xs-1"></div>
                 <div class="col-xs-3 firstpersoncolumn">
-                    <input data-th-title="#{form.street1}" class="form-control firstperson" id="street1" name="street1" type="text" data-th-placeholder="#{form.street1}" data-th-value="${street1}"/>
+                    <p class="control-label" style="text-align: left" data-th-text="${street1}">street1</p>
                 </div>
                 <div class="col-xs-3 secondpersoncolumn">
                     <input data-th-title="#{form.street2}" class="form-control secondperson" id="street2" name="street2" type="text" data-th-placeholder="#{form.street2}" data-th-value="${street2}"/>
@@ -79,10 +67,10 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-xs-2" data-th-text="#{form.city}" for="city1">form.city</label>
+                <label class="control-label col-xs-2" data-th-text="#{form.city}" for="city2">form.city</label>
                 <div class="col-xs-1"></div>
                 <div class="col-xs-3 firstpersoncolumn">
-                    <input data-th-title="#{form.city1}" class="form-control firstperson" id="city1" name="city1" type="text" data-th-placeholder="#{form.city1}" data-th-value="${city1}"/>
+                    <p class="control-label" style="text-align: left" data-th-text="${city1}">city1</p>
                 </div>
                 <div class="col-xs-3 secondpersoncolumn">
                     <input data-th-title="#{form.city2}" class="form-control secondperson" id="city2" name="city2" type="text" data-th-placeholder="#{form.city2}" data-th-value="${city2}"/>
@@ -92,23 +80,10 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-xs-2" data-th-text="#{form.phone}" for="phone1">form.phone</label>
+                <label class="control-label col-xs-2" data-th-text="#{form.email}" for="email2">form.email</label>
                 <div class="col-xs-1"></div>
                 <div class="col-xs-3 firstpersoncolumn">
-                    <input data-th-title="#{form.phone1}" class="form-control firstperson" id="phone1" name="phone1" type="text" data-th-placeholder="#{form.phone1}" data-th-value="${phone1}"/>
-                </div>
-                <div class="col-xs-3 secondpersoncolumn">
-                    <input data-th-title="#{form.phone2}" class="form-control secondperson" id="phone2" name="phone2" type="text" data-th-placeholder="#{form.phone2}" data-th-value="${phone2}"/>
-                </div>
-                <div class="col-xs-3 thirdpersoncolumn">
-                    <input data-th-title="#{form.phone3}"  class="form-control thirdperson" id="phone3" name="phone3" type="text" data-th-placeholder="#{form.phone3}" data-th-value="${phone3}"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-xs-2" data-th-text="#{form.email}" for="email1">form.email</label>
-                <div class="col-xs-1"></div>
-                <div class="col-xs-3 firstpersoncolumn">
-                    <input data-th-title="#{form.email1}" class="form-control firstperson" id="email1" name="email1" type="email" data-th-placeholder="#{form.email1}" data-th-value="${email1}"/>
+                    <p class="control-label" style="text-align: left" data-th-text="${email1}">email1</p>
                 </div>
                 <div class="col-xs-3 secondpersoncolumn">
                     <input data-th-title="#{form.email2}" class="form-control secondperson" id="email2" name="email2" type="email" data-th-placeholder="#{form.email2}" data-th-value="${email2}"/>
@@ -150,34 +125,42 @@
                         <span data-th-text="${roominfo.name}" data-th-remove="tag">form.size.single</span>
                     </label>
                     <p class="control-label col-xs-3" style="text-align: left"><a data-th-href="${roominfo.infolink}">click here for more info</a></p>
-                    <p class="control-label col-xs-1">$84.00*</p>
+                    <p class="control-label col-xs-1" data-th-id="'roomtype'+${iter.count}+'price'">unknown*</p>
                     <p class="control-label col-xs-2">per night / per room</p>
                     <input type="hidden" data-th-id="'price'+${iter.count}+'_1'" data-th-name="'price'+${iter.count}+'_1'" data-th-value="${roominfo.price1}"/>
                     <input type="hidden" data-th-id="'price'+${iter.count}+'_2'" data-th-name="'price'+${iter.count}+'_2'" data-th-value="${roominfo.price2}"/>
                     <input type="hidden" data-th-id="'price'+${iter.count}+'_3'" data-th-name="'price'+${iter.count}+'_3'" data-th-value="${roominfo.price3}"/>
                     <input type="hidden" data-th-id="roomtype_initial" name="roomtype_initial" data-th-value="${iter.count}" data-th-if="${roominfo.value==roomtype}"/>
                 </div>
+                <div class="row">
+                    <div class="col-xs-3"></div>
+                    <p class="col-xs-9" data-th-text="#{form.price.disclaimer}">form.price.disclaimer</p>
+                </div>
             </div>
             <div class="form-group">
-                <p class="col-xs-12"></p>
+                <label class="control-label col-xs-2" data-th-text="#{form.comments}" for="comments">form.comments</label>
+                <div class="col-xs-1"></div>
+                <div class="col-xs-9">
+                    <textarea class="form-control" rows="5" id="comments" name="comments"></textarea>
+                </div>
             </div>
-
-            <div class="checkbox">
-                <label><input type="checkbox"/> I understand that making a room reservation request using this page does not guarantee me a room.
-                    I will receive a reply from the hotel team by email.</label>
+            <div class="form-group">
+                <label class="control-label col-xs-2" data-th-text="#{form.understood}" for="understood">form.understood</label>
+                <div class="col-xs-1"></div>
+                <div class="checkbox col-xs-9">
+                    <label><input type="checkbox" id="understood" name="understood" value="yes"/><span data-th-text="#{form.submit.disclaimer}" data-th-remove="tag">form.submit.disclaimer</span></label>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Make a request</button>
+            <div class="form-group">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-9">
+                    <input type="hidden" data-th-name="${_csrf.parameterName}" data-th-value="${_csrf.token}"/>
+                    <button type="submit" id="submitbutton" class="btn btn-default" data-th-text="#{form.submit}">form.submit</button>
+                </div>
+            </div>
         </form>
     </div>
 
-
-    <div class="row">
-        <div class="col-xs-12">
-            <noscript>
-                <p>Sorry, you must enable javascript for this app to work!</p>
-            </noscript>
-        </div>
-    </div>
     <link data-th-replace="thymeleaf-fragments :: page-footer"/>
 </div>
 

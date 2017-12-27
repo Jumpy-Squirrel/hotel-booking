@@ -1,24 +1,29 @@
-/*
- *    Copyright 2017 Eurofurence e.V.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- *
- */
+function isMainPage() {
+    return $('#mainpage').length > 0;
+}
+
+function unhideInfoWell() {
+    $('#unhide_with_js').css('visibility', 'visible');
+    $('#hide_with_js').css('visibility', 'hidden');
+}
+
+function isFormPage() {
+    return $('#formpage').length > 0;
+}
 
 function disableClickOnNavbarLinks() {
     $('.nav li.noclick a').click(function() {
         return false;
     });
+}
+
+function updatePrices() {
+    var roomsize =  $('input[name=roomsize]:checked').val();
+    var maxType = $('#roomtype_max').val();
+    for (var i = 1; i <= maxType; i++) {
+        var price = $('#price'+i+'_'+roomsize).val() + '*';
+        $('#roomtype'+i+'price').text(price);
+    }
 }
 
 function activateLabel(label, active) {
@@ -35,6 +40,7 @@ function changedRoomsize(value) {
     activateLabel('#size_triple_label', (value === '3'));
     $('input.secondperson').prop('disabled',(value === '1'));
     $('input.thirdperson').prop('disabled',(value === '1' || value === '2'));
+    updatePrices();
 }
 
 function switchActiveOnRoomsize() {
@@ -98,14 +104,61 @@ function initializeDatepicker() {
     });
 }
 
+function canSubmit() {
+    return $('input[type=checkbox][name=understood]:checked').length;
+}
+
+function preventSubmitUntilConfirmed() {
+    $("#form").submit(function(e) {
+        if(!canSubmit()) {
+            alert("Please confirm that you have understood what you will need to do after clicking 'generate email'!");
+
+            //stop the form from submitting
+            return false;
+        }
+
+        return true;
+    });
+}
+
+function changedConfirm() {
+    var submitbutton = $('#submitbutton');
+    if (canSubmit()) {
+        submitbutton.removeClass('btn-default');
+        submitbutton.addClass('btn-primary');
+        submitbutton.addClass('active');
+    } else {
+        submitbutton.removeClass('active');
+        submitbutton.removeClass('btn-primary');
+        submitbutton.addClass('btn-default');
+    }
+}
+
+function switchSubmitActiveOnConfirm() {
+    $('input[type=checkbox][name=understood]').change(function() {
+        changedConfirm();
+    });
+}
+
 $(document).ready(function() {
     disableClickOnNavbarLinks();
 
-    switchActiveOnRoomsize();
-    setInitialRoomsize();
+    if (isMainPage()) {
+        unhideInfoWell();
+    }
+    if (isFormPage()) {
+        preventSubmitUntilConfirmed();
 
-    initializeDatepicker();
+        switchActiveOnRoomsize();
+        setInitialRoomsize();
 
-    switchActiveOnRoomtype();
-    setInitialRoomtype();
+        initializeDatepicker();
+
+        switchActiveOnRoomtype();
+        setInitialRoomtype();
+
+        updatePrices();
+
+        switchSubmitActiveOnConfirm();
+    }
 });

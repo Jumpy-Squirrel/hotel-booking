@@ -3,6 +3,8 @@ package info.rexis.hotelbooking.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Arrays;
@@ -27,8 +29,8 @@ public class WebViewController {
         return showPage(PAGE_FORM, model);
     }
 
-    @GetMapping(PAGE_SHOW)
-    public String showReservationShowPage(Model model) {
+    @PostMapping(PAGE_SHOW)
+    public String showReservationShowPage(@ModelAttribute("reservation") ReservationDto reservation, Model model) {
         return showPage(PAGE_SHOW, model);
     }
 
@@ -51,9 +53,6 @@ public class WebViewController {
 
     private void setupForm(Model model) {
         model.addAttribute("roomsize", "1");
-        model.addAttribute("nick1", "Nickname1");
-        model.addAttribute("nick2", "");
-        model.addAttribute("nick3", "");
         model.addAttribute("name1", "First Last");
         model.addAttribute("name2", "");
         model.addAttribute("name3", "");
@@ -63,9 +62,6 @@ public class WebViewController {
         model.addAttribute("city1", "New York 1F8 4G3");
         model.addAttribute("city2", "");
         model.addAttribute("city3", "");
-        model.addAttribute("phone1", "+555 4444 123");
-        model.addAttribute("phone2", "");
-        model.addAttribute("phone3", "");
         model.addAttribute("email1", "test@mailinator.com");
         model.addAttribute("email2", "");
         model.addAttribute("email3", "");
