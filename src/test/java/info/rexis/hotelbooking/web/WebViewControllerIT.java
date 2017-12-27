@@ -82,6 +82,7 @@ public class WebViewControllerIT {
         mockMvc.perform(
                 post("/" + requestPath)
                         .param("_csrf", csrftoken)
+                        .param("roomtype", "1")
                         .session((MockHttpSession) session)
         )
                 .andExpect(status().isOk())

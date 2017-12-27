@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 @ConfigurationProperties("hotelinfo")
 public class HotelRoomProperties {
     private List<RoomTypeInfo> roomtypes;
+    private String recipient;
+    private String stichwort;
 
     @Data
     public static class RoomTypeInfo {
@@ -29,10 +31,9 @@ public class HotelRoomProperties {
             info.put("value", value);
             info.put("description", description);
             info.put("infolink", infolink);
-            // todo locale aware formatting and currency
-            info.put("price1", Float.toString(price1));
-            info.put("price2", Float.toString(price2));
-            info.put("price3", Float.toString(price3));
+            info.put("price1", String.format("%8.2f €", price1));
+            info.put("price2", String.format("%8.2f €", price2));
+            info.put("price3", String.format("%8.2f €", price3));
             return info;
         }
     }
@@ -41,5 +42,9 @@ public class HotelRoomProperties {
         return roomtypes.stream()
                 .map(RoomTypeInfo::toMap)
                 .collect(Collectors.toList());
+    }
+
+    public RoomTypeInfo byRoomTypePosition(int pos) {
+        return roomtypes.get(pos - 1);
     }
 }

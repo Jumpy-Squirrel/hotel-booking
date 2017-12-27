@@ -21,3 +21,5 @@ hotelinfo:
       price1: 14.00
       price2: 15.00
       price3: 19.00
+  recipient: demo@mailinator.com
+  stichwort: Demo Convention

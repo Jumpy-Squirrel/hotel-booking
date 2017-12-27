@@ -1,0 +1,51 @@
+An: $recipient
+Subject: Reservierungsanfrage $stichwort - $id
+
+
+Sehr geehrte Damen und Herren!
+
+Ich möchte gern folgende Reservierung vornehmen:
+
+Stichwort:  $stichwort
+Mein Code:  ${r.token}-${id}
+
+Zimmertyp:  $roomtype
+Belegung:   $r.roomsize Personen
+
+Ankunft:    $r.arrival
+Abreise:    $r.departure
+
+1.Person und Hauptkontakt:
+            $r.name1
+            $r.street1
+            $r.city1
+            $r.email1
+
+#if ($r.roomsize > 1)##
+2.Person:
+#if ("$r.name2" != "")##
+            $r.name2
+            $r.street2
+            $r.city2
+            $r.email2
+#else##
+            (Angaben nicht verfügbar)
+#end##
+
+#end##
+#if ($r.roomsize > 2)##
+3. Person:
+#if ("$r.name3" != "")##
+            $r.name3
+            $r.street3
+            $r.city3
+            $r.email3
+#else##
+             (Angaben nicht verfügbar)
+#end##
+
+#end##
+Vielen Dank!
+
+Mit freundlichen Grüßen,
+    $r.name1

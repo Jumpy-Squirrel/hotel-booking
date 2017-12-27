@@ -31,6 +31,10 @@ public class ReservationDto {
 
     private String understood;
 
+    private int id;
+
+    private String token;
+
     public void overridePersonalInfo(PersonalInfoDto info) {
         name1 = info.getName();
         street1 = info.getStreet();

@@ -1,0 +1,51 @@
+To: $recipient
+Subject: Room Inquiry $stichwort - $id
+
+
+Dear Sir or Madam!
+
+I would like to make the following reservation:
+
+Keyword:     $stichwort
+My secret:   ${r.token}-${id}
+
+Room Type:   $roomtype
+Occupancy:   $r.roomsize people
+
+Arrival:     $r.arrival
+Departure:   $r.departure
+
+1st Person and main contact:
+             $r.name1
+             $r.street1
+             $r.city1
+             $r.email1
+
+#if ($r.roomsize > 1)##
+2nd Person:
+#if ("$r.name2" != "")##
+             $r.name2
+             $r.street2
+             $r.city2
+             $r.email2
+#else##
+             (info not available)
+#end##
+
+#end##
+#if ($r.roomsize > 2)##
+3rd Person:
+#if ("$r.name3" != "")##
+             $r.name3
+             $r.street3
+             $r.city3
+             $r.email3
+#else##
+             (info not available)
+#end##
+
+#end##
+Thank You!
+
+Best regards,
+    $r.name1

@@ -124,9 +124,9 @@
                         &nbsp;
                         <span data-th-text="${roominfo.name}" data-th-remove="tag">form.size.single</span>
                     </label>
-                    <p class="control-label col-xs-3" style="text-align: left"><a data-th-href="${roominfo.infolink}">click here for more info</a></p>
+                    <p class="control-label col-xs-3" style="text-align: left"><a target="_blank" data-th-href="${roominfo.infolink}" data-th-text="#{form.roomtype.infolink}">click here for more info</a></p>
                     <p class="control-label col-xs-1" data-th-id="'roomtype'+${iter.count}+'price'">unknown*</p>
-                    <p class="control-label col-xs-2">per night / per room</p>
+                    <p class="control-label col-xs-2" data-th-text="#{form.roomtype.priceinfo}">per night / per room</p>
                     <input type="hidden" data-th-id="'price'+${iter.count}+'_1'" data-th-name="'price'+${iter.count}+'_1'" data-th-value="${roominfo.price1}"/>
                     <input type="hidden" data-th-id="'price'+${iter.count}+'_2'" data-th-name="'price'+${iter.count}+'_2'" data-th-value="${roominfo.price2}"/>
                     <input type="hidden" data-th-id="'price'+${iter.count}+'_3'" data-th-name="'price'+${iter.count}+'_3'" data-th-value="${roominfo.price3}"/>

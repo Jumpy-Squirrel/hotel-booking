@@ -24,6 +24,7 @@ public class ReservationService {
     public String constructEmail(ReservationDto reservation, PersonalInfoRequestDto personalInfoCredentials) {
         PersonalInfoDto personalInfo = regsysRepository.getPersonalInfo(personalInfoCredentials);
         reservation.overridePersonalInfo(personalInfo);
-        return emailRepository.mapToEmail(reservation);
+        HotelRoomProperties.RoomTypeInfo roomTypeInfo = hotelRoomProperties.getRoomtypes().get(reservation.getRoomtype() - 1);
+        return emailRepository.mapToEmail(reservation, hotelRoomProperties);
     }
 }
