@@ -2,6 +2,7 @@ package info.rexis.hotelbooking.services;
 
 import info.rexis.hotelbooking.repositories.email.EmailRepository;
 import info.rexis.hotelbooking.repositories.regsys.RegsysRepository;
+import info.rexis.hotelbooking.services.dto.EmailDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
 import info.rexis.hotelbooking.services.config.HotelRoomProperties;
@@ -21,10 +22,9 @@ public class ReservationService {
         return hotelRoomProperties;
     }
 
-    public String constructEmail(ReservationDto reservation, PersonalInfoRequestDto personalInfoCredentials) {
+    public EmailDto constructEmail(ReservationDto reservation, PersonalInfoRequestDto personalInfoCredentials) {
         PersonalInfoDto personalInfo = regsysRepository.getPersonalInfo(personalInfoCredentials);
         reservation.overridePersonalInfo(personalInfo);
-        HotelRoomProperties.RoomTypeInfo roomTypeInfo = hotelRoomProperties.getRoomtypes().get(reservation.getRoomtype() - 1);
         return emailRepository.mapToEmail(reservation, hotelRoomProperties);
     }
 }

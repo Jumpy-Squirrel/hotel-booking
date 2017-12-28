@@ -1,6 +1,7 @@
 package info.rexis.hotelbooking.web;
 
 import info.rexis.hotelbooking.services.ReservationService;
+import info.rexis.hotelbooking.services.dto.EmailDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Controller
 @RequestMapping("/")
@@ -38,8 +41,18 @@ public class WebViewController {
         // todo add id and token from session
         reservation.setId(172);
         reservation.setToken("zcjWu1WsOY8ywnGfCAIL");
-        String email = reservationService.constructEmail(reservation, PersonalInfoRequestDto.builder().build());
-        model.addAttribute("email", email);
+        EmailDto emailDto = reservationService.constructEmail(reservation, PersonalInfoRequestDto.builder().build());
+        model.addAttribute("email", emailDto.getBody());
+        model.addAttribute("subject", emailDto.getSubject());
+        model.addAttribute("recipient", emailDto.getRecipient());
+        try {
+            String encodedBody = URLEncoder.encode(emailDto.getBody(), StandardCharsets.UTF_8.toString());
+            String encodedSubject = URLEncoder.encode(emailDto.getSubject(), StandardCharsets.UTF_8.toString());
+            String fullMailtoLink = "mailto:" + emailDto.getRecipient() + "?subject=" + encodedSubject + "&body=" + encodedBody;
+            model.addAttribute("mailtolink", fullMailtoLink);
+        } catch (Exception ignore) {
+            // ok, we won't offer the link in this case
+        }
         return showPage(PAGE_SHOW, model);
     }
 
