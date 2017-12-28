@@ -167,7 +167,9 @@ function areDatesOk() {
 }
 
 function isDisclaimerAccepted() {
-    return $('input[type=checkbox][name=understood]:checked').length;
+    var disclaimer_ok = $('input[type=checkbox][name=understood]:checked').length;
+    fieldErrorMarker('#understood_error', disclaimer_ok);
+    return disclaimer_ok;
 }
 
 function canSubmit() {
@@ -234,5 +236,7 @@ $(document).ready(function() {
 
         switchSubmitOnConfirm();
         switchSubmitOnChangedDates();
+
+        potentialChangeInSubmitState();
     }
 });

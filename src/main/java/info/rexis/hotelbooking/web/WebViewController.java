@@ -64,17 +64,9 @@ public class WebViewController {
     private void setupForm(Model model) {
         model.addAttribute("roomsize", "1");
         model.addAttribute("name1", "First Last");
-        model.addAttribute("name2", "Second Name");
-        model.addAttribute("name3", "Third Person");
         model.addAttribute("street1", "166 Main Street");
-        model.addAttribute("street2", "2 Central Ave");
-        model.addAttribute("street3", "4 Hopswitch Drive");
         model.addAttribute("city1", "New York 1F8 4G3");
-        model.addAttribute("city2", "Atlanta 2AB 3CF");
-        model.addAttribute("city3", "Minicity 9QF 3RR");
         model.addAttribute("email1", "test@mailinator.com");
-        model.addAttribute("email2", "test2@mailinator.com");
-        model.addAttribute("email3", "test3@mailinator.com");
         model.addAttribute("roomtype", "standard");
         model.addAttribute("roomtypes", reservationService.getHotelRoomProperties().toListOfMaps());
     }

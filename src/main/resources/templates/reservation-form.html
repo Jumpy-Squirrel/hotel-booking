@@ -102,11 +102,11 @@
                     <input type="hidden" id="date2s" name="date2s" data-th-value="#{form.date.earliest}"/>
                     <input type="hidden" id="date2e" name="date2e" data-th-value="#{form.date.latest}"/>
                     <span class="has-error" id="arrival_error">
-                        <input data-th-title="#{form.date.arrival}" class="form-control" id="arrival" name="arrival" type="text" data-th-placeholder="#{form.date.arrival}" data-th-value="${arrival}"/>
+                        <input data-th-title="#{form.date.arrival}" class="form-control" id="arrival" name="arrival" type="text" data-th-placeholder="#{form.date.arrival}" data-th-value="${arrival}?${arrival}:#{form.date.default.arrival}"/>
                     </span>
                     <span class="input-group-addon">-</span>
                     <span class="has-error" id="departure_error">
-                        <input data-th-title="#{form.date.departure}" class="form-control" id="departure" name="departure" type="text" data-th-placeholder="#{form.date.departure}" data-th-value="${departure}"/>
+                        <input data-th-title="#{form.date.departure}" class="form-control" id="departure" name="departure" type="text" data-th-placeholder="#{form.date.departure}" data-th-value="${departure}?${departure}:#{form.date.default.departure}"/>
                     </span>
                 </div>
                 <div class="col-xs-4"></div>
@@ -148,7 +148,7 @@
             <div class="form-group">
                 <label class="control-label col-xs-2" data-th-text="#{form.understood}" for="understood">form.understood</label>
                 <div class="col-xs-1"></div>
-                <div class="checkbox col-xs-9">
+                <div class="checkbox col-xs-9 has-error" id="understood_error">
                     <label><input type="checkbox" id="understood" name="understood" value="yes"/><span data-th-text="#{form.submit.disclaimer}" data-th-remove="tag">form.submit.disclaimer</span></label>
                 </div>
             </div>
