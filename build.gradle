@@ -63,7 +63,9 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
-    compile 'org.apache.velocity:velocity:1.7'
+    compile('org.apache.velocity:velocity:1.7')
+    compile('org.springframework.cloud:spring-cloud-starter-openfeign:1.4.0.RELEASE')
+    compile('io.github.openfeign:feign-httpclient:9.5.1')
     providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 	compileOnly('org.springframework.boot:spring-boot-configuration-processor')
  	testCompile('org.springframework.boot:spring-boot-starter-test')

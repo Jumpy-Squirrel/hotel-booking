@@ -23,3 +23,8 @@ hotelinfo:
       price3: 19.00
   recipient: demo@mailinator.com
   stichwort: Demo Convention
+
+regsys:
+  uri: http://localhost:8080/regsys/service/room-booking-api
+  auth: demoAuth
+  relaxedSsl: true

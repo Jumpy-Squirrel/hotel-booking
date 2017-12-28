@@ -1,5 +1,7 @@
 package info.rexis.hotelbooking.web;
 
+import info.rexis.hotelbooking.HotelbookingApplication;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -15,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -25,48 +27,71 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles({"test"})
 @SpringBootTest
 @AutoConfigureMockMvc
+@ContextConfiguration(classes = {HotelbookingApplication.class, MockRegsysFeignClientConfig.class})
 public class WebViewControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
+    private static final String REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION = "?id=1&token=lala";
+
     @Test
     public void shouldReturnMainPage() throws Exception {
-        shouldReturnPageWithGet("", "id=\"mainpage\"");
+        shouldReturnPageWithGet(REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION, "id=\"mainpage\"");
+    }
+
+    @Test
+    public void shouldReturnForbiddenPageIfSessionWithoutInfo() throws Exception {
+        shouldReturnPageWithGet(WebViewController.PAGE_MAIN, "id=\"forbidden\"");
+    }
+
+    @Test
+    public void shouldReturnMainPageAgainWithoutParamsIfSessionHasInfo() throws Exception {
+        obtainSession(REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION);
+        shouldReturnPageWithGet(WebViewController.PAGE_MAIN, "id=\"mainpage\"", session);
     }
 
     @Test
     public void shouldReturnReservationFormPage() throws Exception {
-        shouldReturnPageWithGet(WebViewController.PAGE_FORM, "id=\"formpage\"");
+        obtainSession(REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION);
+        shouldReturnPageWithGet(WebViewController.PAGE_FORM, "id=\"formpage\"", session);
+    }
+
+    @Test
+    public void shouldReturnForbiddenIfReservationFormWithoutInfoInSession() throws Exception {
+        shouldReturnPageWithGet(WebViewController.PAGE_FORM, "id=\"forbidden\"");
     }
 
     @Test
     public void shouldDenyWithoutCsrfToken() throws Exception {
-        obtainCsrfTokenAndSession(WebViewController.PAGE_FORM);
+        obtainSession(REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION);
         shouldDenyPostWithoutCsrfToken(WebViewController.PAGE_SHOW);
     }
 
     @Test
     public void shouldReturnReservationShowPage() throws Exception {
-        obtainCsrfTokenAndSession(WebViewController.PAGE_FORM);
+        obtainSession(REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION);
+        obtainSessionAndCsrfToken(WebViewController.PAGE_FORM, session);
         shouldReturnPageWithPost(WebViewController.PAGE_SHOW, "id=\"showpage\"");
-    }
-
-    private void shouldReturnPageWithGet(String requestPath, String expectedExcerpt) throws Exception {
-        mockMvc.perform(get("/" + requestPath))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString(expectedExcerpt)));
     }
 
     private String csrftoken;
     private HttpSession session;
 
-    private void obtainCsrfTokenAndSession(String requestPath) throws Exception {
+    private void obtainSession(String requestPath) throws Exception {
         MvcResult result = mockMvc.perform(get("/" + requestPath))
                 .andExpect(status().isOk())
                 .andReturn();
-        String content = result.getResponse().getContentAsString();
-
         session = result.getRequest().getSession();
+    }
+
+    private void obtainSessionAndCsrfToken(String requestPath, HttpSession httpSession) throws Exception {
+        MvcResult result = mockMvc.perform(get("/" + requestPath).session((MockHttpSession) httpSession))
+                .andExpect(status().isOk())
+                .andReturn();
+        // need to do this because the csrf token also changes the session
+        session = result.getRequest().getSession();
+
+        String content = result.getResponse().getContentAsString();
 
         Pattern p = Pattern.compile(".*name=\"_csrf\" value=\"([a-z0-9-]+)\".*",
                 Pattern.MULTILINE | Pattern.DOTALL);
@@ -78,6 +103,18 @@ public class WebViewControllerIT {
         }
     }
 
+    private void shouldReturnPageWithGet(String requestPath, String expectedExcerpt) throws Exception {
+        mockMvc.perform(get("/" + requestPath))
+                .andExpect(status().isOk())
+                .andExpect(content().string(CoreMatchers.containsString(expectedExcerpt)));
+    }
+
+    private void shouldReturnPageWithGet(String requestPath, String expectedExcerpt, HttpSession httpSession) throws Exception {
+        mockMvc.perform(get("/" + requestPath).session((MockHttpSession) httpSession))
+                .andExpect(status().isOk())
+                .andExpect(content().string(CoreMatchers.containsString(expectedExcerpt)));
+    }
+
     private void shouldReturnPageWithPost(String requestPath, String expectedExcerpt) throws Exception {
         mockMvc.perform(
                 post("/" + requestPath)
@@ -86,7 +123,7 @@ public class WebViewControllerIT {
                         .session((MockHttpSession) session)
         )
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString(expectedExcerpt)));
+                .andExpect(content().string(CoreMatchers.containsString(expectedExcerpt)));
     }
 
     private void shouldDenyPostWithoutCsrfToken(String requestPath) throws Exception {

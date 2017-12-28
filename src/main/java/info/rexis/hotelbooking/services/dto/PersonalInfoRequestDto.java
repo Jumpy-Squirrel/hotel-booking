@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class PersonalInfoRequestDto {
-    private String id;
+    private int id;
     private String token;
 }

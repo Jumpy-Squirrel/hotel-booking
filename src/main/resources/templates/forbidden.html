@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html data-th-lang="#{lang.code}">
+<head>
+    <title data-th-text="#{window.title}">window.title</title>
+    <link data-th-replace="thymeleaf-fragments :: styling-and-scripts-in-header"/>
+</head>
+<body>
+
+<div class="container-fluid" id="forbidden">
+    <nav data-th-fragment="navigation-bar" class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <span class="navbar-brand" data-th-text="#{forbidden.title}">forbidden.title</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="well well-sm">
+        <div class="row" style="margin-top: 30%; margin-bottom: 30%">
+            <div class="col-xs-12">
+                <h1 align="center" data-th-text="#{forbidden.text}">forbidden.text</h1>
+            </div>
+        </div>
+    </div>
+
+    <link data-th-replace="thymeleaf-fragments :: page-footer"/>
+</div>
+
+</body>
+</html>

@@ -34,11 +34,4 @@ public class ReservationDto {
     private int id;
 
     private String token;
-
-    public void overridePersonalInfo(PersonalInfoDto info) {
-        name1 = info.getName();
-        street1 = info.getStreet();
-        city1 = info.getCity();
-        email1 = info.getEmail();
-    }
 }

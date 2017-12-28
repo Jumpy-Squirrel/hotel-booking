@@ -22,9 +22,18 @@ public class ReservationService {
         return hotelRoomProperties;
     }
 
-    public EmailDto constructEmail(ReservationDto reservation, PersonalInfoRequestDto personalInfoCredentials) {
-        PersonalInfoDto personalInfo = regsysRepository.getPersonalInfo(personalInfoCredentials);
-        reservation.overridePersonalInfo(personalInfo);
+    public PersonalInfoDto requestPersonalInfo(PersonalInfoRequestDto infoRequest) {
+        return regsysRepository.getPersonalInfo(infoRequest);
+    }
+
+    public EmailDto constructEmail(ReservationDto reservation, PersonalInfoDto personalInfo) {
+        reservation.setId(personalInfo.getId());
+        reservation.setToken(personalInfo.getToken());
+        // in case they have set the 1st person values somehow, we overwrite them again
+        reservation.setName1(personalInfo.getName());
+        reservation.setStreet1(personalInfo.getStreet());
+        reservation.setCity1(personalInfo.getCity());
+        reservation.setEmail1(personalInfo.getEmail());
         return emailRepository.mapToEmail(reservation, hotelRoomProperties);
     }
 }
