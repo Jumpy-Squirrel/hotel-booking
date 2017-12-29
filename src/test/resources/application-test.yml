@@ -33,3 +33,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+regsys:
+  uri: http://localhost/should/never/be/used/anyway
+  auth: demoAuth
+  relaxedSsl: false
