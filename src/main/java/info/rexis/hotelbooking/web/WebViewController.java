@@ -30,6 +30,7 @@ public class WebViewController {
     public static final String PAGE_FORM = "reservation-form";
     public static final String PAGE_SHOW = "reservation-show";
     public static final String PAGE_FORBIDDEN = "forbidden";
+    public static final String PAGE_SESSION_LOST = "session-lost";
 
     private ReservationService reservationService;
 
@@ -44,21 +45,21 @@ public class WebViewController {
                 .build();
         PersonalInfoDto personalInfo = reservationService.requestPersonalInfo(piRequest);
         putPersonalInfoIntoSession(session, personalInfo);
-        return showPage(PAGE_MAIN, model);
+        return showPage(PAGE_MAIN, model, true);
     }
 
     @GetMapping(PAGE_MAIN)
     public String showMainPageAgain(HttpSession session, Model model) {
         PersonalInfoDto personalInfo = getPersonalInfoFromSession(session);
         session.setAttribute("personal", personalInfo);
-        return showPage(PAGE_MAIN, model);
+        return showPage(PAGE_MAIN, model, true);
     }
 
     @GetMapping(PAGE_FORM)
     public String showReservationFormPage(HttpSession session, Model model) {
         PersonalInfoDto personalInfo = getPersonalInfoFromSession(session);
         setupForm(model, personalInfo);
-        return showPage(PAGE_FORM, model);
+        return showPage(PAGE_FORM, model, true);
     }
 
     @PostMapping(PAGE_SHOW)
@@ -78,17 +79,17 @@ public class WebViewController {
         } catch (Exception ignore) {
             // ok, we won't offer the link in this case
         }
-        return showPage(PAGE_SHOW, model);
+        return showPage(PAGE_SHOW, model, true);
     }
 
     @ExceptionHandler(RegsysClientError.class)
     public String showForbiddenPage(Model model) {
-        return showPage(PAGE_FORBIDDEN, model);
+        return showPage(PAGE_FORBIDDEN, model, false);
     }
 
     @ExceptionHandler(SessionLostClientError.class)
     public String showSessionLostPage(Model model) {
-        return showPage(PAGE_FORBIDDEN, model);
+        return showPage(PAGE_SESSION_LOST, model, false);
     }
 
     private void putPersonalInfoIntoSession(HttpSession session, PersonalInfoDto personalInfo) {
@@ -103,8 +104,11 @@ public class WebViewController {
         return personalInfo;
     }
 
-    private String showPage(String page, Model model) {
+    private String showPage(String page, Model model, boolean customJs) {
         model.addAttribute("currentpage", page);
+        if (customJs) {
+            model.addAttribute("includecustomjs", "true");
+        }
         return page;
     }
 

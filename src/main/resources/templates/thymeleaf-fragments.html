@@ -10,7 +10,7 @@
     <script data-th-src="@{/js/bootstrap.min.js}"></script>
     <script data-th-src="@{/js/bootstrap-datepicker.min.js}"></script>
     <script data-th-src="@{/locales/}+#{datepicker-locale-script}"></script>
-    <script data-th-unless="${currentpage == forbidden}" data-th-src="@{/js/app.js}"></script>
+    <script data-th-if="${includecustomjs}" data-th-src="@{/js/app.js}"></script>
     <style type="text/css">
         body { padding-bottom: 70px; }
     </style>

@@ -1,8 +1,10 @@
 package info.rexis.hotelbooking.repositories.regsys.feign;
 
 import feign.Client;
+import feign.Logger;
 import feign.codec.ErrorDecoder;
 import feign.httpclient.ApacheHttpClient;
+import info.rexis.hotelbooking.util.feign.LoggingErrorDecoderWrapper;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -29,7 +31,7 @@ public class RegsysFeignConfiguration {
 
     @Bean
     public ErrorDecoder feignErrorDecoder() {
-        return new RegsysFeignClientErrorDecoder();
+        return new LoggingErrorDecoderWrapper(new RegsysFeignClientErrorDecoder());
     }
 
     private SSLContext trustEverythingSSLContext() {
@@ -53,5 +55,10 @@ public class RegsysFeignConfiguration {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Bean
+    Logger.Level feignLoggerLevel() {
+        return Logger.Level.BASIC;
     }
 }

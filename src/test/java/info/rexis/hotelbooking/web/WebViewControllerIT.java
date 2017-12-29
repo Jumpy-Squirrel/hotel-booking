@@ -41,7 +41,7 @@ public class WebViewControllerIT {
 
     @Test
     public void shouldReturnForbiddenPageIfSessionWithoutInfo() throws Exception {
-        shouldReturnPageWithGet(WebViewController.PAGE_MAIN, "id=\"forbidden\"");
+        shouldReturnPageWithGet(WebViewController.PAGE_MAIN, "id=\"sessionlost\"");
     }
 
     @Test
@@ -58,7 +58,7 @@ public class WebViewControllerIT {
 
     @Test
     public void shouldReturnForbiddenIfReservationFormWithoutInfoInSession() throws Exception {
-        shouldReturnPageWithGet(WebViewController.PAGE_FORM, "id=\"forbidden\"");
+        shouldReturnPageWithGet(WebViewController.PAGE_FORM, "id=\"sessionlost\"");
     }
 
     @Test

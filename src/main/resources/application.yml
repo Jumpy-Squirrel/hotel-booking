@@ -20,3 +20,10 @@ spring:
 info:
   version: 0.1.0
   os: ${os.name}
+
+logging:
+  ignorepattern: '(\/hotel-booking)?\/(css|fonts|images|js|locales)\/.*'
+  level:
+    info.rexis.hotelbooking.web.config.RegexedRequestLoggingFilter: DEBUG
+    info.rexis.hotelbooking.repositories.regsys.feign.RegsysFeignClient: DEBUG
+    info.rexis.hotelbooking.web.AppErrorController: INFO
