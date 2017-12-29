@@ -7,6 +7,7 @@ import info.rexis.hotelbooking.services.dto.PersonalInfoDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
 import info.rexis.hotelbooking.web.exceptions.SessionLostClientError;
+import info.rexis.hotelbooking.web.mappers.PersonalInfoMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,7 +59,8 @@ public class WebViewController {
     @GetMapping(PAGE_FORM)
     public String showReservationFormPage(HttpSession session, Model model) {
         PersonalInfoDto personalInfo = getPersonalInfoFromSession(session);
-        setupForm(model, personalInfo);
+        PersonalInfoMapper.modelFromPersonalInfo(model, personalInfo);
+        initializeForm(model);
         return showPage(PAGE_FORM, model, true);
     }
 
@@ -112,12 +114,8 @@ public class WebViewController {
         return page;
     }
 
-    private void setupForm(Model model, PersonalInfoDto info) {
+    private void initializeForm(Model model) {
         model.addAttribute("roomsize", "1");
-        model.addAttribute("name1", info.getName());
-        model.addAttribute("street1", info.getStreet());
-        model.addAttribute("city1", info.getCity());
-        model.addAttribute("email1", info.getEmail());
         model.addAttribute("roomtype", "standard");
         model.addAttribute("roomtypes", reservationService.getHotelRoomProperties().toListOfMaps());
     }

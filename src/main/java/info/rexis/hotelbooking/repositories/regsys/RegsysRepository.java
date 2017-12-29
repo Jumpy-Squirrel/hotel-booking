@@ -32,12 +32,17 @@ public class RegsysRepository {
         if (!response.isOk()) {
             throw new RegsysClientError("Could not retrieve attendee data from regsys, probably wrong auth, id, token or attendee status");
         }
+        return constructPersonalInfoDto(personalInfoRequest, response);
+    }
+
+    private PersonalInfoDto constructPersonalInfoDto(PersonalInfoRequestDto personalInfoRequest, RegsysInfoResponse response) {
         return PersonalInfoDto.builder()
                 .id(personalInfoRequest.getId())
                 .token(personalInfoRequest.getToken())
                 .name(response.getName())
                 .street(response.getStreet())
                 .city(response.getCity())
+                .country(response.getCountry())
                 .email(response.getEmail())
                 .build();
     }

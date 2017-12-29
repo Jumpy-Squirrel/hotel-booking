@@ -27,13 +27,18 @@ public class ReservationService {
     }
 
     public EmailDto constructEmail(ReservationDto reservation, PersonalInfoDto personalInfo) {
+        fillInOverwriteFirstPerson(reservation, personalInfo);
+        return emailRepository.mapToEmail(reservation, hotelRoomProperties);
+    }
+
+    private void fillInOverwriteFirstPerson(ReservationDto reservation, PersonalInfoDto personalInfo) {
         reservation.setId(personalInfo.getId());
         reservation.setToken(personalInfo.getToken());
         // in case they have set the 1st person values somehow, we overwrite them again
         reservation.setName1(personalInfo.getName());
         reservation.setStreet1(personalInfo.getStreet());
         reservation.setCity1(personalInfo.getCity());
+        reservation.setCountry1(personalInfo.getCountry());
         reservation.setEmail1(personalInfo.getEmail());
-        return emailRepository.mapToEmail(reservation, hotelRoomProperties);
     }
 }

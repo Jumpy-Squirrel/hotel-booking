@@ -77,6 +77,19 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label col-xs-2" data-th-text="#{form.country}" for="country2">form.country</label>
+                <div class="col-xs-1"></div>
+                <div class="col-xs-3 firstpersoncolumn">
+                    <p class="control-label" style="text-align: left" data-th-text="${country1}">country1</p>
+                </div>
+                <div class="col-xs-3 secondpersoncolumn">
+                    <input data-th-title="#{form.country2}" class="form-control secondperson" id="country2" name="country2" type="text" data-th-placeholder="#{form.country2}" data-th-value="${country2}"/>
+                </div>
+                <div class="col-xs-3 thirdpersoncolumn">
+                    <input data-th-title="#{form.country3}"  class="form-control thirdperson" id="country3" name="country3" type="text" data-th-placeholder="#{form.country3}" data-th-value="${country3}"/>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="control-label col-xs-2" data-th-text="#{form.email}" for="email2">form.email</label>
                 <div class="col-xs-1"></div>
                 <div class="col-xs-3 firstpersoncolumn">

@@ -15,6 +15,7 @@ Departure:   $r.departure
              $r.name1
              $r.street1
              $r.city1
+             $r.country1
              $r.email1
 
 #if ($r.roomsize > 1)##
@@ -23,6 +24,7 @@ Departure:   $r.departure
              $r.name2
              $r.street2
              $r.city2
+             $r.country2
              $r.email2
 #else##
              (info not available)
@@ -35,6 +37,7 @@ Departure:   $r.departure
              $r.name3
              $r.street3
              $r.city3
+             $r.country3
              $r.email3
 #else##
              (info not available)
