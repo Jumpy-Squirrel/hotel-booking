@@ -180,6 +180,10 @@ function canSubmit() {
 function preventSubmitUntilConfirmed() {
     $("#form").submit(function(e) {
         if(!canSubmit()) {
+            var message = $('#cannot_submit').val()
+            if (message)
+                alert(message);
+
             //stop the form from submitting
             return false;
         }

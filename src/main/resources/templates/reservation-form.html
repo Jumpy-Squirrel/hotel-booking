@@ -31,7 +31,7 @@
                     <span data-th-text="#{form.size.triple}" data-th-remove="tag">form.size.triple</span>
                 </label>
             </div>
-            <div class="form-group">
+            <div class="">
                 <p class="col-xs-3"></p>
                 <p class="col-xs-3"><b data-th-text="#{form.person1}">form.person1</b></p>
                 <p class="col-xs-3"><b data-th-text="#{form.person2}">form.person2</b></p>
@@ -102,7 +102,7 @@
                     <input data-th-title="#{form.email3}"  class="form-control thirdperson" id="email3" name="email3" type="email" data-th-placeholder="#{form.email3}" data-th-value="${email3}"/>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="">
                 <p class="col-xs-12"></p>
             </div>
             <div class="form-group">
@@ -124,7 +124,7 @@
                 </div>
                 <div class="col-xs-4"></div>
             </div>
-            <div class="form-group">
+            <div class="">
                 <p class="col-xs-12"></p>
             </div>
             <div class="form-group">
@@ -155,7 +155,7 @@
                 <label class="control-label col-xs-2" data-th-text="#{form.comments}" for="comments">form.comments</label>
                 <div class="col-xs-1"></div>
                 <div class="col-xs-9">
-                    <textarea class="form-control" rows="5" id="comments" name="comments"></textarea>
+                    <textarea class="form-control" rows="4" id="comments" name="comments"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -169,6 +169,7 @@
                 <div class="col-xs-3"></div>
                 <div class="col-xs-9">
                     <input type="hidden" data-th-name="${_csrf.parameterName}" data-th-value="${_csrf.token}"/>
+                    <input type="hidden" id="cannot_submit" name="ignore" data-th-value="#{form.submit.failmessage}"/>
                     <button type="submit" id="submitbutton" class="btn btn-default" data-th-text="#{form.submit}">form.submit</button>
                 </div>
             </div>
