@@ -1,6 +1,9 @@
 package info.rexis.hotelbooking.services.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Index;
@@ -10,6 +13,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "reservations",
        indexes = {@Index(name = "id_idx", columnList = "id")})
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReservationDto {
     private int roomsize;
 

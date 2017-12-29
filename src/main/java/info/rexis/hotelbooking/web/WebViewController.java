@@ -34,6 +34,7 @@ public class WebViewController {
     public static final String PAGE_SESSION_LOST = "session-lost";
 
     private ReservationService reservationService;
+    private ReservationMapper reservationMapper;
 
     @GetMapping
     public String showMainPage(@RequestParam(name = "id", required = false, defaultValue = "0") String id,
@@ -62,7 +63,7 @@ public class WebViewController {
         PersonalInfoDto personalInfo = getPersonalInfoFromSession(session);
         ReservationDto reservation = reservationService.prefillReservation(personalInfo);
 
-        ReservationMapper.modelFromReservation(model, reservation, reservationService.getHotelRoomProperties());
+        reservationMapper.modelFromReservation(model, reservation, reservationService.getHotelRoomProperties());
         model.addAttribute("roomtypes", reservationService.getHotelRoomProperties().toListOfMaps());
         return showPage(PAGE_FORM, model, true);
     }
