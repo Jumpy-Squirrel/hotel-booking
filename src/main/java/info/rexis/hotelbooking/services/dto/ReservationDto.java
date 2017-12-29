@@ -1,8 +1,15 @@
 package info.rexis.hotelbooking.services.dto;
 
 import lombok.Data;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 @Data
+@Entity
+@Table(name = "reservations",
+       indexes = {@Index(name = "id_idx", columnList = "id")})
 public class ReservationDto {
     private int roomsize;
 
@@ -37,4 +44,7 @@ public class ReservationDto {
     private int id;
 
     private String token;
+
+    @Id
+    private String pk;
 }

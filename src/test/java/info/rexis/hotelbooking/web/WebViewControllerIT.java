@@ -74,6 +74,16 @@ public class WebViewControllerIT {
         shouldReturnPageWithPost(WebViewController.PAGE_SHOW, "id=\"showpage\"");
     }
 
+    @Test
+    public void shouldBringBackEnteredInfoOnSecondVisit() throws Exception {
+        obtainSession("?id=2&token=databasetest");
+        obtainSessionAndCsrfToken(WebViewController.PAGE_FORM, session);
+        shouldReturnPageWithPost(WebViewController.PAGE_SHOW, "id=\"showpage\"", "rewuilgfaf");
+
+        obtainSession("?id=2&token=databasetest");
+        shouldReturnPageWithGet(WebViewController.PAGE_FORM, "value=\"rewuilgfaf\"", session);
+    }
+
     private String csrftoken;
     private HttpSession session;
 
@@ -115,15 +125,20 @@ public class WebViewControllerIT {
                 .andExpect(content().string(CoreMatchers.containsString(expectedExcerpt)));
     }
 
-    private void shouldReturnPageWithPost(String requestPath, String expectedExcerpt) throws Exception {
+    private void shouldReturnPageWithPost(String requestPath, String expectedExcerpt, String name3value) throws Exception {
         mockMvc.perform(
                 post("/" + requestPath)
                         .param("_csrf", csrftoken)
                         .param("roomtype", "1")
+                        .param("name3", name3value)
                         .session((MockHttpSession) session)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string(CoreMatchers.containsString(expectedExcerpt)));
+    }
+
+    private void shouldReturnPageWithPost(String requestPath, String expectedExcerpt) throws Exception {
+        shouldReturnPageWithPost(requestPath, expectedExcerpt, "");
     }
 
     private void shouldDenyPostWithoutCsrfToken(String requestPath) throws Exception {

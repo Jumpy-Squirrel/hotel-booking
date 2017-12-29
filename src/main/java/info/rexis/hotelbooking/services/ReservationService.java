@@ -1,5 +1,6 @@
 package info.rexis.hotelbooking.services;
 
+import info.rexis.hotelbooking.repositories.database.DatabaseRepository;
 import info.rexis.hotelbooking.repositories.email.EmailRepository;
 import info.rexis.hotelbooking.repositories.regsys.RegsysRepository;
 import info.rexis.hotelbooking.services.dto.EmailDto;
@@ -17,6 +18,7 @@ public class ReservationService {
     private HotelRoomProperties hotelRoomProperties;
     private EmailRepository emailRepository;
     private RegsysRepository regsysRepository;
+    private DatabaseRepository databaseRepository;
 
     public HotelRoomProperties getHotelRoomProperties() {
         return hotelRoomProperties;
@@ -24,6 +26,23 @@ public class ReservationService {
 
     public PersonalInfoDto requestPersonalInfo(PersonalInfoRequestDto infoRequest) {
         return regsysRepository.getPersonalInfo(infoRequest);
+    }
+
+    public ReservationDto prefillReservation(PersonalInfoDto personalInfo) {
+        ReservationDto fromDatabase = databaseRepository.findLatestReservationOrNull(personalInfo.getId());
+        if (fromDatabase != null) {
+            return fromDatabase;
+        }
+
+        ReservationDto fresh = new ReservationDto();
+        fillInOverwriteFirstPerson(fresh, personalInfo);
+        fresh.setRoomsize(1);
+        fresh.setRoomtype(1);
+        return fresh;
+    }
+
+    public void saveSubmittedReservation(ReservationDto reservation) {
+        databaseRepository.saveReservation(reservation);
     }
 
     public EmailDto constructEmail(ReservationDto reservation, PersonalInfoDto personalInfo) {

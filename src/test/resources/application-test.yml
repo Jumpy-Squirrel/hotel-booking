@@ -23,3 +23,13 @@ hotelinfo:
       price3: 19.00
   recipient: demo@mailinator.com
   stichwort: Demo Convention
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:kpi;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: sa
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

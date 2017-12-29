@@ -28,3 +28,9 @@ regsys:
   uri: http://localhost:8080/regsys/service/room-booking-api
   auth: demoAuth
   relaxedSsl: true
+
+hotelbooking:
+  database:
+    url: jdbc:mysql://localhost/ef24rooms?useSSL=false
+    username: ef-rooms
+    password: demoDbPw

@@ -7,7 +7,7 @@ import info.rexis.hotelbooking.services.dto.PersonalInfoDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
 import info.rexis.hotelbooking.web.exceptions.SessionLostClientError;
-import info.rexis.hotelbooking.web.mappers.PersonalInfoMapper;
+import info.rexis.hotelbooking.web.mappers.ReservationMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,21 +46,24 @@ public class WebViewController {
                 .build();
         PersonalInfoDto personalInfo = reservationService.requestPersonalInfo(piRequest);
         putPersonalInfoIntoSession(session, personalInfo);
+
         return showPage(PAGE_MAIN, model, true);
     }
 
     @GetMapping(PAGE_MAIN)
     public String showMainPageAgain(HttpSession session, Model model) {
-        PersonalInfoDto personalInfo = getPersonalInfoFromSession(session);
-        session.setAttribute("personal", personalInfo);
+        getPersonalInfoFromSession(session);
+
         return showPage(PAGE_MAIN, model, true);
     }
 
     @GetMapping(PAGE_FORM)
     public String showReservationFormPage(HttpSession session, Model model) {
         PersonalInfoDto personalInfo = getPersonalInfoFromSession(session);
-        PersonalInfoMapper.modelFromPersonalInfo(model, personalInfo);
-        initializeForm(model);
+        ReservationDto reservation = reservationService.prefillReservation(personalInfo);
+
+        ReservationMapper.modelFromReservation(model, reservation, reservationService.getHotelRoomProperties());
+        model.addAttribute("roomtypes", reservationService.getHotelRoomProperties().toListOfMaps());
         return showPage(PAGE_FORM, model, true);
     }
 
@@ -70,6 +73,8 @@ public class WebViewController {
                                           Model model) {
         PersonalInfoDto personalInfo = getPersonalInfoFromSession(session);
         EmailDto emailDto = reservationService.constructEmail(reservation, personalInfo);
+        reservationService.saveSubmittedReservation(reservation);
+
         model.addAttribute("email", emailDto.getBody());
         model.addAttribute("subject", emailDto.getSubject());
         model.addAttribute("recipient", emailDto.getRecipient());
@@ -112,11 +117,5 @@ public class WebViewController {
             model.addAttribute("includecustomjs", "true");
         }
         return page;
-    }
-
-    private void initializeForm(Model model) {
-        model.addAttribute("roomsize", "1");
-        model.addAttribute("roomtype", "standard");
-        model.addAttribute("roomtypes", reservationService.getHotelRoomProperties().toListOfMaps());
     }
 }
