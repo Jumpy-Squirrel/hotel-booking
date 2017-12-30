@@ -4,10 +4,10 @@ import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysAuthError;
 import info.rexis.hotelbooking.services.ReservationService;
 import info.rexis.hotelbooking.services.dto.EmailDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoDto;
-import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
-import info.rexis.hotelbooking.web.exceptions.SessionLostClientError;
+import info.rexis.hotelbooking.web.sessions.SessionLostClientError;
 import info.rexis.hotelbooking.web.mappers.ReservationMapper;
+import info.rexis.hotelbooking.web.sessions.PersonalInfoSessionStore;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +23,9 @@ import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Making reservation requests, the public part of the user interface.
+ */
 @Controller
 @RequestMapping("/")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -35,32 +38,29 @@ public class WebViewController {
 
     private ReservationService reservationService;
     private ReservationMapper reservationMapper;
+    private PersonalInfoSessionStore sessionStore;
 
     @GetMapping
     public String showMainPage(@RequestParam(name = "id", required = false, defaultValue = "0") String id,
                                @RequestParam(name = "token", required =  false, defaultValue = "") String token,
                                HttpSession session,
                                Model model) {
-        PersonalInfoRequestDto piRequest = PersonalInfoRequestDto.builder()
-                .id(Integer.parseInt(id))
-                .token(token)
-                .build();
-        PersonalInfoDto personalInfo = reservationService.requestPersonalInfo(piRequest);
-        putPersonalInfoIntoSession(session, personalInfo);
+        PersonalInfoDto personalInfo = reservationService.requestPersonalInfo(Integer.parseInt(id), token);
+        sessionStore.putPersonalInfoIntoSession(session, personalInfo);
 
         return showPage(PAGE_MAIN, model, true);
     }
 
     @GetMapping(PAGE_MAIN)
     public String showMainPageAgain(HttpSession session, Model model) {
-        getPersonalInfoFromSession(session);
+        sessionStore.getPersonalInfoFromSession(session);
 
         return showPage(PAGE_MAIN, model, true);
     }
 
     @GetMapping(PAGE_FORM)
     public String showReservationFormPage(HttpSession session, Model model) {
-        PersonalInfoDto personalInfo = getPersonalInfoFromSession(session);
+        PersonalInfoDto personalInfo = sessionStore.getPersonalInfoFromSession(session);
         ReservationDto reservation = reservationService.prefillReservation(personalInfo);
 
         reservationMapper.modelFromReservation(model, reservation, reservationService.getHotelRoomProperties());
@@ -72,7 +72,7 @@ public class WebViewController {
     public String showReservationShowPage(@ModelAttribute("reservation") ReservationDto reservation,
                                           HttpSession session,
                                           Model model) {
-        PersonalInfoDto personalInfo = getPersonalInfoFromSession(session);
+        PersonalInfoDto personalInfo = sessionStore.getPersonalInfoFromSession(session);
         EmailDto emailDto = reservationService.constructEmail(reservation, personalInfo);
         reservationService.saveSubmittedReservation(reservation);
 
@@ -98,18 +98,6 @@ public class WebViewController {
     @ExceptionHandler(SessionLostClientError.class)
     public String showSessionLostPage(Model model) {
         return showPage(PAGE_SESSION_LOST, model, false);
-    }
-
-    private void putPersonalInfoIntoSession(HttpSession session, PersonalInfoDto personalInfo) {
-        session.setAttribute("personal", personalInfo);
-    }
-
-    private PersonalInfoDto getPersonalInfoFromSession(HttpSession session) {
-        PersonalInfoDto personalInfo = (PersonalInfoDto) session.getAttribute("personal");
-        if (personalInfo == null) {
-            throw new SessionLostClientError("session info not available - either wrong entry point or lost session cookie");
-        }
-        return personalInfo;
     }
 
     private String showPage(String page, Model model, boolean customJs) {

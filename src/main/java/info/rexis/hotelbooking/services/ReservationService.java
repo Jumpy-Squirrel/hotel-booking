@@ -6,7 +6,7 @@ import info.rexis.hotelbooking.repositories.regsys.RegsysRepository;
 import info.rexis.hotelbooking.services.config.HotelRoomProperties;
 import info.rexis.hotelbooking.services.dto.EmailDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoDto;
-import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
+import info.rexis.hotelbooking.repositories.regsys.PersonalInfoRequestDto;
 import info.rexis.hotelbooking.services.dto.ProcessStatus;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
 import lombok.AllArgsConstructor;
@@ -28,7 +28,11 @@ public class ReservationService {
         return hotelRoomProperties;
     }
 
-    public PersonalInfoDto requestPersonalInfo(PersonalInfoRequestDto infoRequest) {
+    public PersonalInfoDto requestPersonalInfo(int id, String token) {
+        PersonalInfoRequestDto infoRequest = PersonalInfoRequestDto.builder()
+                .id(id)
+                .token(token)
+                .build();
         return regsysRepository.getPersonalInfo(infoRequest);
     }
 

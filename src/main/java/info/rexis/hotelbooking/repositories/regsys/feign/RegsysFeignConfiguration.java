@@ -4,7 +4,6 @@ import feign.Client;
 import feign.Logger;
 import feign.codec.ErrorDecoder;
 import feign.httpclient.ApacheHttpClient;
-import info.rexis.hotelbooking.util.feign.LoggingErrorDecoderWrapper;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -19,6 +18,16 @@ import java.security.cert.X509Certificate;
 
 public class RegsysFeignConfiguration {
     @Bean
+    public ErrorDecoder feignErrorDecoder() {
+        return new LoggingErrorDecoderWrapper(new RegsysFeignClientErrorDecoder());
+    }
+
+    @Bean
+    Logger.Level feignLoggerLevel() {
+        return Logger.Level.BASIC;
+    }
+
+    @Bean
     @ConditionalOnProperty(name = "regsys.relaxedSsl", havingValue = "true")
     public Client feignClient() {
         CloseableHttpClient client = HttpClients
@@ -27,11 +36,6 @@ public class RegsysFeignConfiguration {
                 .setSSLContext(trustEverythingSSLContext())
                 .build();
         return new ApacheHttpClient(client);
-    }
-
-    @Bean
-    public ErrorDecoder feignErrorDecoder() {
-        return new LoggingErrorDecoderWrapper(new RegsysFeignClientErrorDecoder());
     }
 
     private SSLContext trustEverythingSSLContext() {
@@ -55,10 +59,5 @@ public class RegsysFeignConfiguration {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Bean
-    Logger.Level feignLoggerLevel() {
-        return Logger.Level.BASIC;
     }
 }

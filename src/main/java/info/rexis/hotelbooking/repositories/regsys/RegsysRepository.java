@@ -4,7 +4,6 @@ import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysAuthError;
 import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysParameterError;
 import info.rexis.hotelbooking.repositories.regsys.feign.RegsysFeignClient;
 import info.rexis.hotelbooking.services.dto.PersonalInfoDto;
-import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;

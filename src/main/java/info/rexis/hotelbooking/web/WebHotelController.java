@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Reservation management for the hotel employees.
+ */
 @Controller
 @RequestMapping("/hotel/")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -55,11 +58,6 @@ public class WebHotelController {
         return showPage(PAGE_HOTEL_FORM, model);
     }
 
-    private String showPage(String page, Model model) {
-        model.addAttribute("currentpage", page);
-        return page;
-    }
-
     @PostMapping(PAGE_HOTEL_DONE)
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String acceptAndShowListPage(@RequestParam(name = "pk") String pk, Model model) {
@@ -72,5 +70,10 @@ public class WebHotelController {
     public String resetAndShowListPage(@RequestParam(name = "pk") String pk, Model model) {
         reservationService.releaseAndPutBack(pk);
         return showListPage(model);
+    }
+
+    private String showPage(String page, Model model) {
+        model.addAttribute("currentpage", page);
+        return page;
     }
 }

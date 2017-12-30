@@ -1,6 +1,7 @@
 package info.rexis.hotelbooking.web.config;
 
 import info.rexis.hotelbooking.web.AppErrorController;
+import info.rexis.hotelbooking.web.logging.RegexedRequestLoggingFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;

@@ -1,7 +1,6 @@
 package info.rexis.hotelbooking.repositories.regsys;
 
 import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysParameterError;
-import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
 import info.rexis.unscanned.MockRegsysFeignClientConfig;
 import org.junit.Test;
 

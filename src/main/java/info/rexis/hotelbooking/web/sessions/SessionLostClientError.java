@@ -1,4 +1,4 @@
-package info.rexis.hotelbooking.web.exceptions;
+package info.rexis.hotelbooking.web.sessions;
 
 public class SessionLostClientError extends RuntimeException {
     public SessionLostClientError(String message) {

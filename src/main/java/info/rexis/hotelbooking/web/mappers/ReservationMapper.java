@@ -2,7 +2,7 @@ package info.rexis.hotelbooking.web.mappers;
 
 import info.rexis.hotelbooking.services.config.HotelRoomProperties;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
-import info.rexis.hotelbooking.util.mappers.LocaleAwareDateConverter;
+import info.rexis.hotelbooking.util.mappers.DateConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -16,7 +16,7 @@ import java.util.Map;
 @Component
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class ReservationMapper {
-    private LocaleAwareDateConverter localeAwareDateConverter;
+    private DateConverter dateConverter;
 
     public void modelFromReservation(Model model, ReservationDto reservation, HotelRoomProperties roomtypes) {
         model.addAttribute("name1", reservation.getName1());
@@ -80,9 +80,9 @@ public class ReservationMapper {
         }
 
         if ("de".equals(currentLanguage())) {
-            return localeAwareDateConverter.localeConvert(input, inputformat, "dd.mm.yyyy");
+            return dateConverter.localeConvert(input, inputformat, "dd.mm.yyyy");
         } else {
-            return localeAwareDateConverter.localeConvert(input, inputformat, "mm/dd/yyyy");
+            return dateConverter.localeConvert(input, inputformat, "mm/dd/yyyy");
         }
     }
 

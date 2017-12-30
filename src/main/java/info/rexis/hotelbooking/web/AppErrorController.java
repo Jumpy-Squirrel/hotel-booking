@@ -1,6 +1,6 @@
 package info.rexis.hotelbooking.web;
 
-import info.rexis.hotelbooking.web.config.RegexedRequestLoggingFilter;
+import info.rexis.hotelbooking.web.logging.RegexedRequestLoggingFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
@@ -36,7 +36,7 @@ public class AppErrorController implements ErrorController {
     }
 
     /**
-     * HTML Error View for all other formats.
+     * HTML Error View.
      */
     @RequestMapping(value = ERROR_PATH, produces = {MediaType.TEXT_HTML_VALUE})
     public ModelAndView errorHtml(HttpServletRequest request) {

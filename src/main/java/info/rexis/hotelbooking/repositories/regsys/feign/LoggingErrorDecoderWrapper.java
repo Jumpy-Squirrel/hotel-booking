@@ -1,4 +1,4 @@
-package info.rexis.hotelbooking.util.feign;
+package info.rexis.hotelbooking.repositories.regsys.feign;
 
 import feign.Response;
 import feign.codec.ErrorDecoder;

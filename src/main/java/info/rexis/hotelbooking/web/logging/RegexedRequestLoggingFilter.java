@@ -1,4 +1,4 @@
-package info.rexis.hotelbooking.web.config;
+package info.rexis.hotelbooking.web.logging;
 
 import info.rexis.hotelbooking.util.exceptions.StacktraceNotNeeded;
 import org.springframework.beans.factory.annotation.Autowired;

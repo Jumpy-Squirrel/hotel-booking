@@ -3,7 +3,7 @@ package info.rexis.hotelbooking.util.mappers;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LocaleAwareDateConverter {
+public class DateConverter {
     public String localeConvert(String input, String inputformat, String outputformat) {
         String iregex = inputformat
                 .replaceFirst("dd", "([0-9]{2})")

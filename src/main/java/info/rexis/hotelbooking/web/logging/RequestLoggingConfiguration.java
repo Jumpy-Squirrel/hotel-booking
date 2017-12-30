@@ -1,4 +1,4 @@
-package info.rexis.hotelbooking.web.config;
+package info.rexis.hotelbooking.web.logging;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

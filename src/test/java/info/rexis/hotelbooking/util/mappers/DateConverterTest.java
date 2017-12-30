@@ -3,7 +3,7 @@ package info.rexis.hotelbooking.util.mappers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-public class LocaleAwareDateConverterTest {
+public class DateConverterTest {
     private static final String GERMAN = "dd.mm.yyyy";
     private static final String ENGLISH = "mm/dd/yyyy";
 
@@ -28,7 +28,7 @@ public class LocaleAwareDateConverterTest {
     }
 
     private void dateConversionTest(String input, String inputformat, String outputformat, String expectedOutput) {
-        String output = new LocaleAwareDateConverter().localeConvert(input, inputformat, outputformat);
+        String output = new DateConverter().localeConvert(input, inputformat, outputformat);
         Assertions.assertThat(output).isEqualTo(expectedOutput);
     }
 }

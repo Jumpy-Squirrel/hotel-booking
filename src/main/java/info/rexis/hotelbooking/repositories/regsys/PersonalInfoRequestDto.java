@@ -1,4 +1,4 @@
-package info.rexis.hotelbooking.services.dto;
+package info.rexis.hotelbooking.repositories.regsys;
 
 import lombok.Builder;
 import lombok.Data;

@@ -3,7 +3,7 @@ package info.rexis.hotelbooking.web.mappers;
 import info.rexis.hotelbooking.services.config.HotelRoomProperties;
 import info.rexis.hotelbooking.services.dto.ProcessStatus;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
-import info.rexis.hotelbooking.util.mappers.LocaleAwareDateConverter;
+import info.rexis.hotelbooking.util.mappers.DateConverter;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
@@ -18,7 +18,7 @@ public class ReservationMapperTest {
         private String fixedLanguage;
 
         FixedLanguageReservationMapper(String fixedLanguage) {
-            super(new LocaleAwareDateConverter());
+            super(new DateConverter());
             this.fixedLanguage = fixedLanguage;
         }
 
