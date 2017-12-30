@@ -2,17 +2,14 @@ package info.rexis.hotelbooking.web;
 
 import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysAuthError;
 import info.rexis.hotelbooking.services.ReservationService;
-import info.rexis.hotelbooking.services.config.HotelRoomProperties;
 import info.rexis.hotelbooking.services.dto.EmailDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
-import info.rexis.hotelbooking.services.dto.ProcessStatus;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
 import info.rexis.hotelbooking.web.exceptions.SessionLostClientError;
 import info.rexis.hotelbooking.web.mappers.ReservationMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,9 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/")
@@ -38,9 +32,6 @@ public class WebViewController {
     public static final String PAGE_SHOW = "reservation-show";
     public static final String PAGE_FORBIDDEN = "forbidden";
     public static final String PAGE_SESSION_LOST = "session-lost";
-    public static final String PAGE_HOTEL_FORM = "hotel-form";
-    public static final String PAGE_HOTEL_LIST = "hotel-list";
-    public static final String PAGE_ERROR = "error";
 
     private ReservationService reservationService;
     private ReservationMapper reservationMapper;
@@ -97,30 +88,6 @@ public class WebViewController {
             // ok, we won't offer the link in this case
         }
         return showPage(PAGE_SHOW, model, true);
-    }
-
-    @GetMapping(PAGE_HOTEL_LIST)
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String showHotelListPage(Model model) {
-        List<ReservationDto> reservations = reservationService.getEarliest20ByStatus(ProcessStatus.NEW);
-        HotelRoomProperties hotelRoomProps = reservationService.getHotelRoomProperties();
-        List<Map<String, String>> listing = reservations.stream()
-                .map(r -> reservationMapper.listviewMapFromReservation(r, hotelRoomProps))
-                .collect(Collectors.toList());
-
-        model.addAttribute("listing", listing);
-        return showPage(PAGE_HOTEL_LIST, model, false);
-    }
-
-    @GetMapping(PAGE_HOTEL_FORM)
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    public String showHotelFormPage(@RequestParam(name = "pk") String pk,
-                                    Model model) {
-        ReservationDto reservation = reservationService.fetchAndLockForProcessing(pk);
-
-        reservationMapper.modelFromReservation(model, reservation, reservationService.getHotelRoomProperties());
-        model.addAttribute("roomtypes", reservationService.getHotelRoomProperties().toListOfMaps());
-        return showPage(PAGE_HOTEL_FORM, model, false);
     }
 
     @ExceptionHandler(RegsysAuthError.class)
