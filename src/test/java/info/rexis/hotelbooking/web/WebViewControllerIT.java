@@ -1,6 +1,8 @@
 package info.rexis.hotelbooking.web;
 
 import info.rexis.hotelbooking.HotelbookingApplication;
+import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysClientError;
+import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysServerError;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.util.NestedServletException;
 
 import javax.servlet.http.HttpSession;
 import java.util.regex.Matcher;
@@ -33,14 +36,51 @@ public class WebViewControllerIT {
     private MockMvc mockMvc;
 
     private static final String REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION = "?id=1&token=lala";
+    private static final String REQUEST_PATH_MISSING_PARAMETER = "?id=2";
+    private static final String REQUEST_PATH_FOR_CLIENT_ERROR = "?id=3&token=" + MockRegsysFeignClientConfig.CLIENTERROR_TOKEN;
+    private static final String REQUEST_PATH_FOR_SERVER_ERROR = "?id=3&token=" + MockRegsysFeignClientConfig.SERVERERROR_TOKEN;
+    private static final String REQUEST_PATH_FOR_DENY = "?id=4&token=" + MockRegsysFeignClientConfig.INVALID_TOKEN;
 
     @Test
     public void shouldReturnMainPage() throws Exception {
         shouldReturnPageWithGet(REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION, "id=\"mainpage\"");
     }
 
+    // MockMvc does not support the global error controller, so test passes when a RegsysServerError has bubbled up
+    // anything further would mostly be testing Spring Mvc's error handling
+    @Test(expected = RegsysServerError.class)
+    public void shouldReturnErrorPageWhenRegsysSaysServerError() throws Exception {
+        try {
+            mockMvc.perform(get("/" + REQUEST_PATH_FOR_SERVER_ERROR).header("Accept", "text/html"));
+        } catch (NestedServletException nested) {
+            throw (Exception) nested.getCause();
+        }
+    }
+
+    // MockMvc does not support the global error controller, so test passes when a RegsysServerError has bubbled up
+    // anything further would mostly be testing Spring Mvc's error handling
+    @Test(expected = RegsysClientError.class)
+    public void shouldReturnErrorPageWhenRegsysSaysNotOk() throws Exception {
+        try {
+            mockMvc.perform(get("/" + REQUEST_PATH_FOR_CLIENT_ERROR).header("Accept", "text/html"));
+        } catch (NestedServletException nested) {
+            throw (Exception) nested.getCause();
+        }
+    }
+
+    // MockMvc does not support the global error controller, so test passes when 400 is returned
     @Test
-    public void shouldReturnForbiddenPageIfSessionWithoutInfo() throws Exception {
+    public void shouldReturnErrorPageWhenMissingParameter() throws Exception {
+        shouldReturn4xxWithGet(REQUEST_PATH_MISSING_PARAMETER);
+    }
+
+    @Test
+    public void shouldReturnForbiddenPageWhenRegsysSaysOkFalse() throws Exception {
+        shouldReturnPageWithGet(REQUEST_PATH_FOR_DENY, "id=\"forbidden\"");
+    }
+
+    @Test
+    public void shouldReturnSessionLostPageIfSessionWithoutInfo() throws Exception {
         shouldReturnPageWithGet(WebViewController.PAGE_MAIN, "id=\"sessionlost\"");
     }
 
@@ -114,13 +154,18 @@ public class WebViewControllerIT {
     }
 
     private void shouldReturnPageWithGet(String requestPath, String expectedExcerpt) throws Exception {
-        mockMvc.perform(get("/" + requestPath))
+        mockMvc.perform(get("/" + requestPath).header("Accept", "text/html"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(CoreMatchers.containsString(expectedExcerpt)));
     }
 
+    private void shouldReturn4xxWithGet(String requestPath) throws Exception {
+        mockMvc.perform(get("/" + requestPath).header("Accept", "text/html"))
+                .andExpect(status().is4xxClientError());
+    }
+
     private void shouldReturnPageWithGet(String requestPath, String expectedExcerpt, HttpSession httpSession) throws Exception {
-        mockMvc.perform(get("/" + requestPath).session((MockHttpSession) httpSession))
+        mockMvc.perform(get("/" + requestPath).session((MockHttpSession) httpSession).header("Accept", "text/html"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(CoreMatchers.containsString(expectedExcerpt)));
     }
