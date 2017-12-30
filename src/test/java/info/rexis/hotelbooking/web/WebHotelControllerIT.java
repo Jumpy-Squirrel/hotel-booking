@@ -1,6 +1,7 @@
 package info.rexis.hotelbooking.web;
 
 import info.rexis.hotelbooking.HotelbookingApplication;
+import info.rexis.unscanned.MockRegsysFeignClientConfig;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;

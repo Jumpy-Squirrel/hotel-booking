@@ -37,7 +37,7 @@ spring:
 regsys:
   uri: http://localhost/should/never/be/used/anyway
   auth: demoAuth
-  relaxedSsl: false
+  relaxedSsl: true
 
 hotelbooking:
   admin:

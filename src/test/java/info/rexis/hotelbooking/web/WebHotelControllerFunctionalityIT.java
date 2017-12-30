@@ -4,6 +4,7 @@ import info.rexis.hotelbooking.HotelbookingApplication;
 import info.rexis.hotelbooking.repositories.database.DatabaseRepository;
 import info.rexis.hotelbooking.services.dto.ProcessStatus;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
+import info.rexis.unscanned.MockRegsysFeignClientConfig;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;

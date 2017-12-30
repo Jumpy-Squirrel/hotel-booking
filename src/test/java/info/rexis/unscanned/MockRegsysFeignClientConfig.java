@@ -1,4 +1,4 @@
-package info.rexis.hotelbooking.web;
+package info.rexis.unscanned;
 
 import feign.Response;
 import info.rexis.hotelbooking.repositories.regsys.RegsysInfoResponse;

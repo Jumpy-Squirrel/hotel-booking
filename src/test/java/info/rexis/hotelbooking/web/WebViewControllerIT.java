@@ -3,6 +3,7 @@ package info.rexis.hotelbooking.web;
 import info.rexis.hotelbooking.HotelbookingApplication;
 import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysClientError;
 import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysServerError;
+import info.rexis.unscanned.MockRegsysFeignClientConfig;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
