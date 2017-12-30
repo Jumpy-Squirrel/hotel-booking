@@ -8,11 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Data
 @Entity
 @Table(name = "reservations",
-       indexes = {@Index(name = "id_idx", columnList = "id")})
+       indexes = {@Index(name = "id_idx", columnList = "id"),
+       @Index(name = "status_idx", columnList = "status")})
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReservationDto {
@@ -52,4 +54,8 @@ public class ReservationDto {
 
     @Id
     private String pk;
+
+    private ProcessStatus status = ProcessStatus.NEW;
+
+    private Date processed;
 }

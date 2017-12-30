@@ -1,6 +1,7 @@
 package info.rexis.hotelbooking.repositories.regsys;
 
-import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysClientError;
+import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysAuthError;
+import info.rexis.hotelbooking.repositories.regsys.exceptions.RegsysParameterError;
 import info.rexis.hotelbooking.repositories.regsys.feign.RegsysFeignClient;
 import info.rexis.hotelbooking.services.dto.PersonalInfoDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
@@ -26,11 +27,11 @@ public class RegsysRepository {
 
     private PersonalInfoDto mapAndRequest(RegsysFeignClient client, PersonalInfoRequestDto personalInfoRequest) {
         if (personalInfoRequest.getId() <= 0 || personalInfoRequest.getToken() == null || personalInfoRequest.getToken().equals("")) {
-            throw new RegsysClientError("No valid id provided or no token provided");
+            throw new RegsysParameterError("No valid id provided or no token provided");
         }
         RegsysInfoResponse response = client.attendeeInfo(auth, personalInfoRequest.getId(), personalInfoRequest.getToken());
         if (!response.isOk()) {
-            throw new RegsysClientError("Could not retrieve attendee data from regsys, probably wrong auth, id, token or attendee status");
+            throw new RegsysAuthError("Could not retrieve attendee data from regsys, probably wrong auth, id, token or attendee status");
         }
         return constructPersonalInfoDto(personalInfoRequest, response);
     }

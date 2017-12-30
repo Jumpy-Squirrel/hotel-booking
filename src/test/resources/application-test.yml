@@ -38,3 +38,9 @@ regsys:
   uri: http://localhost/should/never/be/used/anyway
   auth: demoAuth
   relaxedSsl: false
+
+hotelbooking:
+  admin:
+    pw: demoPw
+  user:
+    pw: demoPw

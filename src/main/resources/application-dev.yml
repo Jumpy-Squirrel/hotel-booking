@@ -34,3 +34,7 @@ hotelbooking:
     url: jdbc:mysql://localhost/ef24rooms?useSSL=false
     username: ef-rooms
     password: demoDbPw
+  admin:
+    pw: demoPw
+  user:
+    pw: demoPw

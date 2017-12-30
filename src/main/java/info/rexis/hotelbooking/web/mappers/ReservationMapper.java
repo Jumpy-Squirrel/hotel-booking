@@ -6,7 +6,9 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 @Component
 public class ReservationMapper {
@@ -30,12 +32,36 @@ public class ReservationMapper {
         model.addAttribute("email3", reservation.getEmail3());
 
         model.addAttribute("roomsize", Integer.toString(reservation.getRoomsize()));
-        model.addAttribute("roomtype", roomtypes.getRoomtypes().get(reservation.getRoomtype() - 1).getValue());
+        model.addAttribute("roomtype", roomtypeValue(reservation, roomtypes));
 
-        model.addAttribute("arrival", localeConvert(reservation.getArrival(), reservation.getDateformat()));
-        model.addAttribute("departure", localeConvert(reservation.getDeparture(), reservation.getDateformat()));
+        model.addAttribute("arrival", arrivalConverted(reservation));
+        model.addAttribute("departure", departureConverted(reservation));
 
         model.addAttribute("comments", reservation.getComments());
+    }
+
+    public Map<String, String> listviewMapFromReservation(ReservationDto reservation, HotelRoomProperties roomtypes) {
+        Map<String, String> result = new HashMap<>();
+        result.put("pk", reservation.getPk());
+        result.put("name1", reservation.getName1());
+        result.put("email1", reservation.getEmail1());
+        result.put("roomsize", Integer.toString(reservation.getRoomsize()));
+        result.put("roomtype", roomtypeValue(reservation, roomtypes));
+        result.put("arrival", arrivalConverted(reservation));
+        result.put("departure", departureConverted(reservation));
+        return result;
+    }
+
+    private String arrivalConverted(ReservationDto reservation) {
+        return localeConvert(reservation.getArrival(), reservation.getDateformat());
+    }
+
+    private String departureConverted(ReservationDto reservation) {
+        return localeConvert(reservation.getDeparture(), reservation.getDateformat());
+    }
+
+    private String roomtypeValue(ReservationDto reservation, HotelRoomProperties roomtypes) {
+        return roomtypes.getRoomtypes().get(reservation.getRoomtype() - 1).getValue();
     }
 
     private String localeConvert(String input, String inputformat) {

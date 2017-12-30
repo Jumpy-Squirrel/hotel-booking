@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html data-th-lang="#{lang.code}">
+<head>
+    <title>Offene Anfragen</title>
+    <link data-th-replace="thymeleaf-fragments :: styling-and-scripts-in-header"/>
+</head>
+<body>
+
+<div class="container-fluid">
+    <nav data-th-fragment="navigation-bar-hotel" class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <span class="navbar-brand">Hotel</span>
+            </div>
+            <p class="navbar-text">&nbsp;&nbsp;&nbsp;</p>
+            <ul class="nav navbar-nav">
+                <li data-th-class="${currentpage=='hotel-list'}?'active noclick':''"><a data-th-href="@{/hotel-list}">Aktualisieren</a></li>
+                <li data-th-class="${currentpage=='hotel-form'}?'active noclick':'disabled noclick'"><a href="#">Anfrage bearbeiten</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid" id="hotellist">
+        <form action="hotel-form" method="post">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nr.</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Zimmertyp</th>
+                            <th>Belegung</th>
+                            <th>Bearbeiten</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-th-each="reservation,iter : ${listing}">
+                            <td data-th-text="${iter.count}">Nr.</td>
+                            <td data-th-text="${reservation.name1}">Name</td>
+                            <td data-th-text="${reservation.email1}">Email</td>
+                            <td data-th-text="${reservation.roomtype}">Zimmertyp</td>
+                            <td data-th-text="${reservation.roomsize}">Belegung</td>
+                            <td><a data-th-href="@{/hotel-form(pk=${reservation.pk})}">bearbeiten</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+
+    <link data-th-replace="thymeleaf-fragments :: page-footer"/>
+</div>
+
+</body>
+</html>

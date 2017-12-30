@@ -1,7 +1,9 @@
 package info.rexis.hotelbooking.repositories.database;
 
+import info.rexis.hotelbooking.repositories.database.exceptions.ReservationNotFoundError;
 import info.rexis.hotelbooking.repositories.database.internal.ReservationRepository;
 import info.rexis.hotelbooking.repositories.database.util.PkGenerator;
+import info.rexis.hotelbooking.services.dto.ProcessStatus;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,25 @@ import java.util.List;
 public class DatabaseRepository {
     private ReservationRepository reservationRepository;
 
+    public ReservationDto loadReservationOrThrow(String pk) {
+        ReservationDto result;
+        try {
+            result = reservationRepository.findByPk(pk);
+        } catch (Exception e) {
+            throw new ReservationNotFoundError("database error", e);
+        }
+        if (result == null) {
+            throw new ReservationNotFoundError("no such entry for pk " + pk);
+        }
+        return result;
+    }
+
     public void saveReservation(ReservationDto reservation) {
         if (StringUtils.isEmpty(reservation.getPk())) {
             reservation.setPk(PkGenerator.generatePk(reservation.getId()));
+        }
+        if (reservation.getStatus() == null) {
+            reservation.setStatus(ProcessStatus.NEW);
         }
         reservationRepository.save(reservation);
     }
@@ -29,6 +47,10 @@ public class DatabaseRepository {
         }
         reservations.sort(this::comparatorReverseSortedByPk);
         return reservations.get(0);
+    }
+
+    public List<ReservationDto> findEarliest20ByStatus(ProcessStatus status) {
+        return reservationRepository.findTop20ByStatusOrderByPk(status);
     }
 
     private int comparatorReverseSortedByPk(ReservationDto a, ReservationDto b) {

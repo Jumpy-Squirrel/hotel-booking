@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html data-th-lang="#{lang.code}">
+<head>
+    <title>Anfrage bearbeiten</title>
+    <link data-th-replace="thymeleaf-fragments :: styling-and-scripts-in-header"/>
+</head>
+<body>
+
+<div class="container-fluid">
+    <nav data-th-fragment="navigation-bar-hotel" class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <span class="navbar-brand">Hotel</span>
+            </div>
+            <p class="navbar-text">&nbsp;&nbsp;&nbsp;</p>
+            <ul class="nav navbar-nav">
+                <li data-th-class="${currentpage=='hotel-list'}?'active noclick':''"><a data-th-href="@{/hotel-list}">Freigeben und zurück</a></li>
+                <li data-th-class="${currentpage=='hotel-form'}?'active noclick':'disabled noclick'"><a href="#">Anfrage bearbeiten</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid" id="hotelform">
+        <div class="row">
+            <p class="col-xs-2" align="right" data-th-text="#{form.roomtype}">form.roomtype</p>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-8">
+                <span data-th-each="roominfo,iter : ${roomtypes}" data-th-text="${roominfo.name}" data-th-if="${roominfo.value==roomtype}"></span>
+            </div>
+        </div>
+        <div class="row">
+            <p class="col-xs-2" align="right" data-th-text="#{form.size}">form.size</p>
+            <div class="col-xs-1"></div>
+            <p class="col-xs-9" data-th-switch="${roomsize}">
+                <span data-th-case="'1'" data-th-text="#{form.size.single}"></span>
+                <span data-th-case="'2'" data-th-text="#{form.size.double}"></span>
+                <b data-th-case="'3'" data-th-text="#{form.size.triple}"></b>
+            </p>
+        </div>
+        <div class="row">
+            <p class="col-xs-3"></p>
+            <p class="col-xs-3"><b data-th-text="#{form.person1}">form.person1</b></p>
+            <p class="col-xs-3"><b data-th-text="#{form.person2}">form.person2</b></p>
+            <p class="col-xs-3"><b data-th-text="#{form.person3}">form.person3</b></p>
+        </div>
+        <div class="row">
+            <p class="col-xs-2" align="right" data-th-text="#{form.name}">form.name</p>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-3 firstpersoncolumn">
+                <p data-th-text="${name1}">name1</p>
+            </div>
+            <div class="col-xs-3 secondpersoncolumn">
+                <p data-th-if="${roomsize != '1'}" data-th-text="${name2}">name2</p>
+            </div>
+            <div class="col-xs-3 thirdpersoncolumn">
+                <p data-th-if="${roomsize == '3'}" data-th-text="${name3}">name3</p>
+            </div>
+        </div>
+        <div class="row">
+            <p class="col-xs-2" align="right" data-th-text="#{form.street}">form.street</p>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-3 firstpersoncolumn">
+                <p data-th-text="${street1}">street1</p>
+            </div>
+            <div class="col-xs-3 secondpersoncolumn">
+                <p data-th-if="${roomsize != '1'}" data-th-text="${street2}">street2</p>
+            </div>
+            <div class="col-xs-3 thirdpersoncolumn">
+                <p data-th-if="${roomsize == '3'}" data-th-text="${street3}">street3</p>
+            </div>
+        </div>
+        <div class="row">
+            <p class="col-xs-2" align="right" data-th-text="#{form.city}">form.city</p>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-3 firstpersoncolumn">
+                <p data-th-text="${city1}">city1</p>
+            </div>
+            <div class="col-xs-3 secondpersoncolumn">
+                <p data-th-if="${roomsize != '1'}" data-th-text="${city2}">city2</p>
+            </div>
+            <div class="col-xs-3 thirdpersoncolumn">
+                <p data-th-if="${roomsize == '3'}" data-th-text="${city3}">city3</p>
+            </div>
+        </div>
+        <div class="row">
+            <p class="col-xs-2" align="right" data-th-text="#{form.country}">form.country</p>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-3 firstpersoncolumn">
+                <p data-th-text="${country1}">country1</p>
+            </div>
+            <div class="col-xs-3 secondpersoncolumn">
+                <p data-th-if="${roomsize != '1'}" data-th-text="${country2}">country2</p>
+            </div>
+            <div class="col-xs-3 thirdpersoncolumn">
+                <p data-th-if="${roomsize == '3'}" data-th-text="${country3}">country3</p>
+            </div>
+        </div>
+        <div class="row">
+            <p class="col-xs-12"></p>
+        </div>
+        <div class="row">
+            <p class="col-xs-2" align="right" data-th-text="#{form.email}">form.email</p>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-3 firstpersoncolumn">
+                <p data-th-text="${email1}">email1</p>
+            </div>
+            <div class="col-xs-3 secondpersoncolumn">
+                <p data-th-if="${roomsize != '1'}" data-th-text="${email2}">email2</p>
+            </div>
+            <div class="col-xs-3 thirdpersoncolumn">
+                <p data-th-if="${roomsize == '3'}" data-th-text="${email3}">email3</p>
+            </div>
+        </div>
+        <div class="row">
+            <p class="col-xs-12"></p>
+        </div>
+        <div class="row">
+            <p class="col-xs-2" align="right" data-th-text="#{form.dates}">form.dates</p>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-8">
+                <span data-th-text="${arrival}">arrival</span>
+                <span> - </span>
+                <span data-th-text="${departure}">departure</span>
+            </div>
+        </div>
+        <div class="">
+            <p class="col-xs-12"></p>
+        </div>
+        <div class="row">
+            <p class="col-xs-2" align="right" data-th-text="#{form.comments}">form.comments</p>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-8">
+                <p data-th-text="${comments}">comments</p>
+            </div>
+        </div>
+        <form data-th-action="@{/hotel-list}" id="form" method="post" class="form-horizontal">
+            <div class="form-group">
+                <div class="col-xs-3"></div>
+                <div class="col-xs-9">
+                    <input type="hidden" name="pk" data-th-value="${pk}"/>
+                    <input type="hidden" data-th-name="${_csrf.parameterName}" data-th-value="${_csrf.token}"/>
+                    <button type="submit" id="submitbutton" class="btn btn-primary active">Bearbeitung abgeschlossen!</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <link data-th-replace="thymeleaf-fragments :: page-footer"/>
+</div>
+
+</body>
+</html>

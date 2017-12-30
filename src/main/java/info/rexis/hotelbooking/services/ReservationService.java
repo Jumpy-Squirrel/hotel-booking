@@ -3,14 +3,17 @@ package info.rexis.hotelbooking.services;
 import info.rexis.hotelbooking.repositories.database.DatabaseRepository;
 import info.rexis.hotelbooking.repositories.email.EmailRepository;
 import info.rexis.hotelbooking.repositories.regsys.RegsysRepository;
+import info.rexis.hotelbooking.services.config.HotelRoomProperties;
 import info.rexis.hotelbooking.services.dto.EmailDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoRequestDto;
-import info.rexis.hotelbooking.services.config.HotelRoomProperties;
+import info.rexis.hotelbooking.services.dto.ProcessStatus;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -41,6 +44,13 @@ public class ReservationService {
         return fresh;
     }
 
+    public ReservationDto fetchAndLockForProcessing(String pk) {
+        ReservationDto reservation = databaseRepository.loadReservationOrThrow(pk);
+        reservation.setStatus(ProcessStatus.PROCESSING);
+        databaseRepository.saveReservation(reservation);
+        return reservation;
+    }
+
     public void saveSubmittedReservation(ReservationDto reservation) {
         databaseRepository.saveReservation(reservation);
     }
@@ -48,6 +58,10 @@ public class ReservationService {
     public EmailDto constructEmail(ReservationDto reservation, PersonalInfoDto personalInfo) {
         fillInOverwriteFirstPerson(reservation, personalInfo);
         return emailRepository.mapToEmail(reservation, hotelRoomProperties);
+    }
+
+    public List<ReservationDto> getEarliest20ByStatus(ProcessStatus status) {
+        return databaseRepository.findEarliest20ByStatus(status);
     }
 
     private void fillInOverwriteFirstPerson(ReservationDto reservation, PersonalInfoDto personalInfo) {
