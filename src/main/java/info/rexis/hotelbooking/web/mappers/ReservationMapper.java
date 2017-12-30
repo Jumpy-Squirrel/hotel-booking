@@ -67,7 +67,11 @@ public class ReservationMapper {
     }
 
     private String roomtypeValue(ReservationDto reservation, HotelRoomProperties roomtypes) {
-        return roomtypes.getRoomtypes().get(reservation.getRoomtype() - 1).getValue();
+        try {
+            return roomtypes.getRoomtypes().get(reservation.getRoomtype() - 1).getValue();
+        } catch (Exception e) {
+            return "-unknown-";
+        }
     }
 
     private String localeConvert(String input, String inputformat) {
