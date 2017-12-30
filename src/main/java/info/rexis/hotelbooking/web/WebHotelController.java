@@ -47,12 +47,10 @@ public class WebHotelController {
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String showFormPage(@RequestParam(name = "pk") String pk,
                                Model model) {
-        // todo set timestamp
         ReservationDto reservation = reservationService.fetchAndLockForProcessing(pk);
 
-        // todo fail if someone else locked it already - watch for races
-
         reservationMapper.modelFromReservation(model, reservation, reservationService.getHotelRoomProperties());
+        model.addAttribute("pk", reservation.getPk());
         model.addAttribute("roomtypes", reservationService.getHotelRoomProperties().toListOfMaps());
         return showPage(PAGE_HOTEL_FORM, model);
     }
@@ -65,14 +63,14 @@ public class WebHotelController {
     @PostMapping(PAGE_HOTEL_DONE)
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String acceptAndShowListPage(@RequestParam(name = "pk") String pk, Model model) {
-        // set to done
+        reservationService.releaseAndSetToDone(pk);
         return showListPage(model);
     }
 
     @GetMapping(PAGE_HOTEL_DONE)
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String resetAndShowListPage(@RequestParam(name = "pk") String pk, Model model) {
-        // set to new again, clear timestamp
+        reservationService.releaseAndPutBack(pk);
         return showListPage(model);
     }
 }

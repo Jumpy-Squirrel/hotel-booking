@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,9 +47,26 @@ public class ReservationService {
 
     public ReservationDto fetchAndLockForProcessing(String pk) {
         ReservationDto reservation = databaseRepository.loadReservationOrThrow(pk);
+
+        // todo fail if someone else locked it already - watch for races
+
         reservation.setStatus(ProcessStatus.PROCESSING);
+        reservation.setProcessed(new Date());
         databaseRepository.saveReservation(reservation);
         return reservation;
+    }
+
+    public void releaseAndPutBack(String pk) {
+        ReservationDto reservation = databaseRepository.loadReservationOrThrow(pk);
+        reservation.setStatus(ProcessStatus.NEW);
+        databaseRepository.saveReservation(reservation);
+    }
+
+    public void releaseAndSetToDone(String pk) {
+        ReservationDto reservation = databaseRepository.loadReservationOrThrow(pk);
+        reservation.setStatus(ProcessStatus.DONE);
+        reservation.setProcessed(new Date());
+        databaseRepository.saveReservation(reservation);
     }
 
     public void saveSubmittedReservation(ReservationDto reservation) {

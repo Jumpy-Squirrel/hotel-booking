@@ -14,7 +14,7 @@
             </div>
             <p class="navbar-text">&nbsp;&nbsp;&nbsp;</p>
             <ul class="nav navbar-nav">
-                <li data-th-class="${currentpage=='hotel-list'}?'active noclick':''"><a data-th-href="@{/hotel-list}">Aktualisieren</a></li>
+                <li data-th-class="${currentpage=='hotel-list'}?'active noclick':''"><a data-th-href="@{/hotel/hotel-list}">Aktualisieren</a></li>
                 <li data-th-class="${currentpage=='hotel-form'}?'active noclick':'disabled noclick'"><a href="#">Anfrage bearbeiten</a></li>
             </ul>
         </div>
@@ -41,7 +41,7 @@
                             <td data-th-text="${reservation.email1}">Email</td>
                             <td data-th-text="${reservation.roomtype}">Zimmertyp</td>
                             <td data-th-text="${reservation.roomsize}">Belegung</td>
-                            <td><a data-th-href="@{/hotel-form(pk=${reservation.pk})}">bearbeiten</a></td>
+                            <td><a data-th-href="@{/hotel/hotel-form(pk=${reservation.pk})}">bearbeiten</a></td>
                         </tr>
                     </tbody>
                 </table>

@@ -36,7 +36,16 @@ public class AppErrorController implements ErrorController {
     }
 
     /**
-     * Supports JSON, XML.
+     * HTML Error View for all other formats.
+     */
+    @RequestMapping(value = ERROR_PATH, produces = {MediaType.TEXT_HTML_VALUE})
+    public ModelAndView errorHtml(HttpServletRequest request) {
+        logger.warn(requestLoggingFilter.createErrorMessage(request));
+        return new ModelAndView("error", getErrorAttributes(request, false));
+    }
+
+    /**
+     * Supports JSON, XML, other formats.
      */
     @RequestMapping(value = ERROR_PATH, produces = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.TEXT_XML_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -46,15 +55,6 @@ public class AppErrorController implements ErrorController {
         Map<String, Object> body = getErrorAttributes(request, false);
         HttpStatus status = getStatus(request);
         return new ResponseEntity<>(body, status);
-    }
-
-    /**
-     * HTML Error View for all other formats.
-     */
-    @RequestMapping(value = ERROR_PATH)
-    public ModelAndView errorHtml(HttpServletRequest request) {
-        logger.warn(requestLoggingFilter.createErrorMessage(request));
-        return new ModelAndView("error", getErrorAttributes(request, false));
     }
 
     @Override
