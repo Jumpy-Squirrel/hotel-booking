@@ -17,7 +17,7 @@ public class MockRegsysFeignClientConfig {
     public static final String CLIENTERROR_TOKEN = "clienterror";
     public static final String INVALID_TOKEN = "invalid";
 
-    public class MockRegsysFeignClient implements RegsysFeignClient {
+    public static class MockRegsysFeignClient implements RegsysFeignClient {
         @Override
         public RegsysInfoResponse attendeeInfo(String auth, int id, String token) {
             RegsysInfoResponse regsysInfoResponse = new RegsysInfoResponse();
