@@ -3,6 +3,7 @@ package info.rexis.hotelbooking.web.mappers;
 import info.rexis.hotelbooking.services.config.HotelRoomProperties;
 import info.rexis.hotelbooking.services.dto.ProcessStatus;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
+import info.rexis.hotelbooking.util.mappers.LocaleAwareDateConverter;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.springframework.ui.ExtendedModelMap;
@@ -13,13 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ReservationMapperTest {
-
-    // --- unit tests for the public top level methods
-
     private class FixedLanguageReservationMapper extends ReservationMapper {
         private String fixedLanguage;
 
         FixedLanguageReservationMapper(String fixedLanguage) {
+            super(new LocaleAwareDateConverter());
             this.fixedLanguage = fixedLanguage;
         }
 
@@ -34,7 +33,7 @@ public class ReservationMapperTest {
                 "name1", "street1", "city1", "country1", "email1",
                 "name2", "street2", "city2", "country2", "email2",
                 "name3", "street3", "city3", "country3", "email3",
-                GERMAN, "20.08.2018", "27.08.2018", 2, "comments", "yes",
+                "dd.mm.yyyy", "20.08.2018", "27.08.2018", 2, "comments", "yes",
                 17, "token", "the_pk", ProcessStatus.NEW, null);
     }
 
@@ -85,35 +84,5 @@ public class ReservationMapperTest {
         expected.put("departure", "27.08.2018");
 
         Assertions.assertThat(output).isEqualTo(expected);
-    }
-
-    // --- unit tests for the internal lower level methods
-
-    private static final String GERMAN = "dd.mm.yyyy";
-    private static final String ENGLISH = "mm/dd/yyyy";
-
-    @Test
-    public void shouldLeaveGermanDateUntouched() {
-        dateConversionTest("23.05.1987", GERMAN, GERMAN, "23.05.1987");
-    }
-
-    @Test
-    public void shouldLeaveEnglishDateUntouched() {
-        dateConversionTest("05/23/1987", ENGLISH, ENGLISH, "05/23/1987");
-    }
-
-    @Test
-    public void shouldConvertToGermanDate() {
-        dateConversionTest("12/31/2018", ENGLISH, GERMAN, "31.12.2018");
-    }
-
-    @Test
-    public void shouldConvertToEnglishDate() {
-        dateConversionTest("04.01.2018", GERMAN, ENGLISH, "01/04/2018");
-    }
-
-    private void dateConversionTest(String input, String inputformat, String outputformat, String expectedOutput) {
-        String output = new ReservationMapper().localeConvert(input, inputformat, outputformat);
-        Assertions.assertThat(output).isEqualTo(expectedOutput);
     }
 }

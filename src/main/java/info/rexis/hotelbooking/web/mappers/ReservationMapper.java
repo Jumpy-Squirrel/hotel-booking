@@ -2,6 +2,9 @@ package info.rexis.hotelbooking.web.mappers;
 
 import info.rexis.hotelbooking.services.config.HotelRoomProperties;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
+import info.rexis.hotelbooking.util.mappers.LocaleAwareDateConverter;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
@@ -11,7 +14,10 @@ import java.util.Locale;
 import java.util.Map;
 
 @Component
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class ReservationMapper {
+    private LocaleAwareDateConverter localeAwareDateConverter;
+
     public void modelFromReservation(Model model, ReservationDto reservation, HotelRoomProperties roomtypes) {
         model.addAttribute("name1", reservation.getName1());
         model.addAttribute("street1", reservation.getStreet1());
@@ -70,29 +76,10 @@ public class ReservationMapper {
         }
 
         if ("de".equals(currentLanguage())) {
-            return localeConvert(input, inputformat, "dd.mm.yyyy");
+            return localeAwareDateConverter.localeConvert(input, inputformat, "dd.mm.yyyy");
         } else {
-            return localeConvert(input, inputformat, "mm/dd/yyyy");
+            return localeAwareDateConverter.localeConvert(input, inputformat, "mm/dd/yyyy");
         }
-    }
-
-    protected String localeConvert(String input, String inputformat, String outputformat) {
-        String iregex = inputformat
-                .replaceFirst("dd", "([0-9]{2})")
-                .replaceFirst("mm", "([0-9]{2})")
-                .replaceFirst("yyyy", "([0-9]{4})")
-                .replaceAll("\\.", "\\.");
-        String daysAre = "\\$1";
-        String monthsAre = "\\$2";
-        if (inputformat.matches("mm.dd.yyyy")) {
-            daysAre = "\\$2";
-            monthsAre = "\\$1";
-        }
-        String oregex = outputformat
-                .replaceFirst("dd", daysAre)
-                .replaceFirst("mm", monthsAre)
-                .replaceFirst("yyyy", "\\$3");
-        return input.replaceFirst(iregex, oregex);
     }
 
     protected String currentLanguage() {
