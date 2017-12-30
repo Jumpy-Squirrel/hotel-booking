@@ -1,5 +1,6 @@
 package info.rexis.hotelbooking.web.config;
 
+import info.rexis.hotelbooking.util.exceptions.StacktraceNotNeeded;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
@@ -9,6 +10,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -50,9 +53,23 @@ public class RegexedRequestLoggingFilter extends CommonsRequestLoggingFilter {
                 + " error=" + attributes.get("error");
         Object exception = attributes.get("exception");
         if (exception != null) {
-            suffix += " exception=" + exception
-                    + " stack trace follows\n"
-                    + attributes.get("trace");
+            suffix += " exception=" + exception;
+            boolean showStacktrace = true;
+            try {
+                Type marker = StacktraceNotNeeded.class;
+                Type[] interfaces = Class.forName((String) exception).getGenericInterfaces();
+                boolean hasMarker = Arrays.stream(interfaces).anyMatch(marker::equals);
+                if (hasMarker) {
+                    showStacktrace = false;
+                }
+            } catch (Exception ignored) {
+            }
+            if (showStacktrace) {
+                suffix += " stack trace follows\n"
+                        + attributes.get("trace");
+            } else {
+                suffix += " stack trace suppressed for Exception marked StacktraceNotNeeded";
+            }
         }
         return createMessage(request, "Error request [", suffix);
     }
