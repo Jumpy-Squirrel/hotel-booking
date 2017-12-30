@@ -6,6 +6,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,24 +36,25 @@ public class AppErrorController implements ErrorController {
     }
 
     /**
-     * HTML Error View.
+     * Supports JSON, XML.
      */
-    @RequestMapping(value = ERROR_PATH, produces = "text/html")
-    public ModelAndView errorHtml(HttpServletRequest request) {
-        logger.warn(requestLoggingFilter.createErrorMessage(request));
-        return new ModelAndView("error", getErrorAttributes(request, false));
-    }
-
-    /**
-     * Supports other formats like JSON, XML.
-     */
-    @RequestMapping(value = ERROR_PATH)
+    @RequestMapping(value = ERROR_PATH, produces = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.TEXT_XML_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
     public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
         logger.warn(requestLoggingFilter.createErrorMessage(request));
         Map<String, Object> body = getErrorAttributes(request, false);
         HttpStatus status = getStatus(request);
         return new ResponseEntity<>(body, status);
+    }
+
+    /**
+     * HTML Error View for all other formats.
+     */
+    @RequestMapping(value = ERROR_PATH)
+    public ModelAndView errorHtml(HttpServletRequest request) {
+        logger.warn(requestLoggingFilter.createErrorMessage(request));
+        return new ModelAndView("error", getErrorAttributes(request, false));
     }
 
     @Override
