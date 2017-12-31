@@ -1,8 +1,10 @@
 package info.rexis.unscanned;
 
 import feign.Response;
+import feign.codec.ErrorDecoder;
 import info.rexis.hotelbooking.repositories.regsys.RegsysInfoResponse;
 import info.rexis.hotelbooking.repositories.regsys.RegsysRepository;
+import info.rexis.hotelbooking.repositories.regsys.feign.LoggingErrorDecoderWrapper;
 import info.rexis.hotelbooking.repositories.regsys.feign.RegsysFeignClient;
 import info.rexis.hotelbooking.repositories.regsys.feign.RegsysFeignClientErrorDecoder;
 import org.springframework.context.annotation.Bean;
@@ -20,9 +22,9 @@ public class MockRegsysFeignClientConfig {
     public static class MockRegsysFeignClient implements RegsysFeignClient {
         @Override
         public RegsysInfoResponse attendeeInfo(String auth, int id, String token) {
-            RegsysInfoResponse regsysInfoResponse = new RegsysInfoResponse();
+            ErrorDecoder errDec = new LoggingErrorDecoderWrapper(new RegsysFeignClientErrorDecoder());
             if (token == null || token.equals(CLIENTERROR_TOKEN)) {
-                throw (RuntimeException) new RegsysFeignClientErrorDecoder().decode("whatever",
+                throw (RuntimeException) errDec.decode("whatever",
                         Response.builder()
                                 .status(400)
                                 .reason("missing parameter token")
@@ -31,7 +33,7 @@ public class MockRegsysFeignClientConfig {
                 );
             }
             if (token.equals(SERVERERROR_TOKEN)) {
-                throw (RuntimeException) new RegsysFeignClientErrorDecoder().decode("whatever",
+                throw (RuntimeException) errDec.decode("whatever",
                         Response.builder()
                                 .status(500)
                                 .reason("server error")
@@ -39,6 +41,8 @@ public class MockRegsysFeignClientConfig {
                                 .build()
                 );
             }
+
+            RegsysInfoResponse regsysInfoResponse = new RegsysInfoResponse();
             if (token.equals(INVALID_TOKEN)) {
                 regsysInfoResponse.setOk(false);
             } else {
