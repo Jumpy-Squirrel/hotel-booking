@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.Random;
 
 public class PkGenerator {
+    private PkGenerator() {
+    }
+
     private static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     public static String generatePk(int id) {

@@ -9,8 +9,4 @@ public class RegsysAuthError extends RuntimeException implements StacktraceNotNe
     public RegsysAuthError(String message) {
         super(message);
     }
-
-    public RegsysAuthError(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

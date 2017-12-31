@@ -9,8 +9,4 @@ public class RegsysParameterError extends RuntimeException implements Stacktrace
     public RegsysParameterError(String message) {
         super(message);
     }
-
-    public RegsysParameterError(String message, Throwable cause) {
-        super(message, cause);
-    }
 }
