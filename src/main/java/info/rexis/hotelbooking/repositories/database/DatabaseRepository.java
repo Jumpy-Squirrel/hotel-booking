@@ -53,7 +53,7 @@ public class DatabaseRepository {
         return reservationRepository.findTop20ByStatusOrderByPk(status);
     }
 
-    private int comparatorReverseSortedByPk(ReservationDto a, ReservationDto b) {
+    protected int comparatorReverseSortedByPk(ReservationDto a, ReservationDto b) {
         String pka = nvl(a.getPk());
         String pkb = nvl(b.getPk());
         return pkb.compareTo(pka);
