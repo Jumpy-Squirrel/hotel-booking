@@ -74,7 +74,7 @@ public class ReservationMapper {
         }
     }
 
-    private String localeConvert(String input, String inputformat) {
+    protected String localeConvert(String input, String inputformat) {
         if (input == null || input.equals("")) {
             return input;
         }
