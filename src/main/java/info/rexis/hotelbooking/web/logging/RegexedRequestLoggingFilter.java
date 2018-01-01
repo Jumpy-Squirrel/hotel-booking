@@ -26,7 +26,7 @@ import java.util.Map;
 @Component
 public class RegexedRequestLoggingFilter extends CommonsRequestLoggingFilter {
     @Value("${logging.ignorepattern:.*}")
-    private String loggingIgnorePattern;
+    protected String loggingIgnorePattern;
 
     private ErrorAttributes errorAttributes;
 
@@ -37,12 +37,17 @@ public class RegexedRequestLoggingFilter extends CommonsRequestLoggingFilter {
 
     @Override
     protected boolean shouldLog(HttpServletRequest request) {
-        if (super.shouldLog(request)) {
-            String uri = request.getRequestURI();
-            return !uri.matches(loggingIgnorePattern);
-        } else {
-            return false;
-        }
+        return existingLogFilter(request)
+                && additionalLogFilter(request);
+    }
+
+    protected boolean existingLogFilter(HttpServletRequest request) {
+        return super.shouldLog(request);
+    }
+
+    protected boolean additionalLogFilter(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        return !uri.matches(loggingIgnorePattern);
     }
 
     public String createErrorMessage(HttpServletRequest request) {
@@ -51,20 +56,10 @@ public class RegexedRequestLoggingFilter extends CommonsRequestLoggingFilter {
                 + " path=" + attributes.get("path")
                 + " status=" + attributes.get("status")
                 + " error=" + attributes.get("error");
-        Object exception = attributes.get("exception");
-        if (exception != null) {
-            suffix += " exception=" + exception;
-            boolean showStacktrace = true;
-            try {
-                Type marker = StacktraceNotNeeded.class;
-                Type[] interfaces = Class.forName((String) exception).getGenericInterfaces();
-                boolean hasMarker = Arrays.stream(interfaces).anyMatch(marker::equals);
-                if (hasMarker) {
-                    showStacktrace = false;
-                }
-            } catch (Exception ignored) {
-            }
-            if (showStacktrace) {
+        String exceptionClassName = (String) attributes.get("exception");
+        if (exceptionClassName != null) {
+            suffix += " exception=" + exceptionClassName;
+            if (showStacktrace(exceptionClassName)) {
                 suffix += " stack trace follows\n"
                         + attributes.get("trace");
             } else {
@@ -74,7 +69,21 @@ public class RegexedRequestLoggingFilter extends CommonsRequestLoggingFilter {
         return createMessage(request, "Error request [", suffix);
     }
 
-    private Map<String, Object> getErrorAttributes(HttpServletRequest request) {
+    protected boolean showStacktrace(String exceptionClassName) {
+        boolean showStacktrace = true;
+        try {
+            Type marker = StacktraceNotNeeded.class;
+            Type[] interfaces = Class.forName(exceptionClassName).getGenericInterfaces();
+            boolean hasMarker = Arrays.stream(interfaces).anyMatch(marker::equals);
+            if (hasMarker) {
+                showStacktrace = false;
+            }
+        } catch (Exception ignored) {
+        }
+        return showStacktrace;
+    }
+
+    protected Map<String, Object> getErrorAttributes(HttpServletRequest request) {
         RequestAttributes requestAttributes = new ServletRequestAttributes(request);
         return this.errorAttributes.getErrorAttributes(requestAttributes, true);
     }
