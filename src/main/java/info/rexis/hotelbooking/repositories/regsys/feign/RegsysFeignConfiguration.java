@@ -23,7 +23,7 @@ public class RegsysFeignConfiguration {
     }
 
     @Bean
-    Logger.Level feignLoggerLevel() {
+    public Logger.Level feignLoggerLevel() {
         return Logger.Level.BASIC;
     }
 
@@ -38,22 +38,27 @@ public class RegsysFeignConfiguration {
         return new ApacheHttpClient(client);
     }
 
-    private SSLContext trustEverythingSSLContext() {
+    protected static class TrustEverythingTrustManager implements X509TrustManager {
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+
+        @Override
+        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+        }
+    }
+
+    protected SSLContext trustEverythingSSLContext() {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
 
-            sslContext.init(null, new TrustManager[]{
-                    new X509TrustManager() {
-                        public X509Certificate[] getAcceptedIssuers() {
-                            return null;
-                        }
-
-                        public void checkClientTrusted(X509Certificate[] certs, String authType) {
-                        }
-
-                        public void checkServerTrusted(X509Certificate[] certs, String authType) {
-                        }
-                    }
+            sslContext.init(null, new TrustManager[] {
+                    new TrustEverythingTrustManager()
             }, new SecureRandom());
             return sslContext;
         } catch (Exception e) {
