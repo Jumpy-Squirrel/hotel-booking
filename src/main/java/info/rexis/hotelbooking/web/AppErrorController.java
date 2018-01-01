@@ -68,7 +68,7 @@ public class AppErrorController implements ErrorController {
         return this.errorAttributes.getErrorAttributes(requestAttributes, includeStackTrace);
     }
 
-    private HttpStatus getStatus(HttpServletRequest request) {
+    protected HttpStatus getStatus(HttpServletRequest request) {
         Integer statusCode = (Integer) request
                 .getAttribute("javax.servlet.error.status_code");
         if (statusCode != null) {
