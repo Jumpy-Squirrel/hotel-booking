@@ -6,24 +6,13 @@ import info.rexis.hotelbooking.services.dto.ReservationDto;
 import info.rexis.hotelbooking.util.mappers.DateConverter;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.modules.junit4.PowerMockRunnerDelegate;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
-@RunWith(PowerMockRunner.class)
-@PowerMockRunnerDelegate(JUnit4.class)
-@PrepareForTest(LocaleContextHolder.class)
 public class ReservationMapperTest {
     private class FixedLanguageReservationMapper extends ReservationMapper {
         private String fixedLanguage;
@@ -99,18 +88,11 @@ public class ReservationMapperTest {
 
     @Test
     public void shouldReturnNullWhenInputNull() {
-        Assertions.assertThat(new ReservationMapper(null).localeConvert(null, null)).isNull();
+        Assertions.assertThat(new FixedLanguageReservationMapper("en").localeConvert(null, null)).isNull();
     }
 
     @Test
     public void shouldReturnEmptyWhenInputEmpty() {
-        Assertions.assertThat(new ReservationMapper(null).localeConvert("", null)).isEmpty();
-    }
-
-    @Test
-    public void shouldGetLanguageFromLocale() {
-        PowerMockito.mockStatic(LocaleContextHolder.class);
-        PowerMockito.when(LocaleContextHolder.getLocale()).thenReturn(Locale.GERMANY);
-        Assertions.assertThat(new ReservationMapper(null).currentLanguage()).isEqualTo("de");
+        Assertions.assertThat(new FixedLanguageReservationMapper("de").localeConvert("", null)).isEmpty();
     }
 }
