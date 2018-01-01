@@ -5,6 +5,7 @@ import info.rexis.hotelbooking.services.ReservationService;
 import info.rexis.hotelbooking.services.dto.EmailDto;
 import info.rexis.hotelbooking.services.dto.PersonalInfoDto;
 import info.rexis.hotelbooking.services.dto.ReservationDto;
+import info.rexis.hotelbooking.web.mappers.MailtoLinkBuilder;
 import info.rexis.hotelbooking.web.sessions.SessionLostClientError;
 import info.rexis.hotelbooking.web.mappers.ReservationMapper;
 import info.rexis.hotelbooking.web.sessions.PersonalInfoSessionStore;
@@ -20,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Making reservation requests, the public part of the user interface.
@@ -79,14 +78,7 @@ public class WebViewController {
         model.addAttribute("email", emailDto.getBody());
         model.addAttribute("subject", emailDto.getSubject());
         model.addAttribute("recipient", emailDto.getRecipient());
-        try {
-            String encodedBody = URLEncoder.encode(emailDto.getBody(), StandardCharsets.UTF_8.toString());
-            String encodedSubject = URLEncoder.encode(emailDto.getSubject(), StandardCharsets.UTF_8.toString());
-            String fullMailtoLink = "mailto:" + emailDto.getRecipient() + "?subject=" + encodedSubject + "&body=" + encodedBody;
-            model.addAttribute("mailtolink", fullMailtoLink);
-        } catch (Exception ignore) {
-            // ok, we won't offer the link in this case
-        }
+        model.addAttribute("mailtolink", new MailtoLinkBuilder().buildOrNullIgnoringExceptions(emailDto));
         return showPage(PAGE_SHOW, model, true);
     }
 
