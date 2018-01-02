@@ -72,7 +72,7 @@ public class WebHotelControllerFunctionalityIT {
     @Test
     public void shouldSetFinalStatusAndReturnListPageAgain() throws Exception {
         ReservationDto reservation = new ReservationDto();
-        reservation.setStatus(ProcessStatus.PROCESSING);
+        reservation.setStatus(ProcessStatus.NEW);
         database.saveReservation(reservation);
         logInUser();
 
@@ -83,6 +83,21 @@ public class WebHotelControllerFunctionalityIT {
         reservation = database.loadReservationOrThrow(reservation.getPk());
 
         Assertions.assertThat(reservation.getStatus()).isEqualTo(ProcessStatus.DONE);
+    }
+
+    @Test
+    public void shouldRejectLockingAndShowListPageWithWarning() throws Exception {
+        ReservationDto reservation = new ReservationDto();
+        reservation.setStatus(ProcessStatus.PROCESSING);
+        reservation.setSession("someone_elses_session");
+        database.saveReservation(reservation);
+        logInUser();
+
+        // get the csrf token + session
+        helper.performGETAndExpectOkContaining(REQUEST_PATH_FORM + "?pk=" + reservation.getPk(), "Dieser Eintrag wird oder wurde bereits von einem anderen Benutzer bearbeitet", false);
+
+        reservation = database.loadReservationOrThrow(reservation.getPk());
+        Assertions.assertThat(reservation.getSession()).isEqualTo("someone_elses_session");
     }
 
     private void logInUser() {

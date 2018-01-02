@@ -1,6 +1,7 @@
 package info.rexis.hotelbooking.services;
 
 import info.rexis.hotelbooking.repositories.database.DatabaseRepository;
+import info.rexis.hotelbooking.repositories.database.exceptions.ConcurrentLockError;
 import info.rexis.hotelbooking.repositories.email.EmailRepository;
 import info.rexis.hotelbooking.repositories.regsys.RegsysRepository;
 import info.rexis.hotelbooking.services.config.HotelRoomProperties;
@@ -13,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -49,20 +51,23 @@ public class ReservationService {
         return fresh;
     }
 
-    public ReservationDto fetchAndLockForProcessing(String pk) {
+    @Transactional
+    public ReservationDto fetchAndLockForProcessingOrThrow(String pk, String sessionId) {
+        databaseRepository.lockReservationForProcessingOrNull(pk, ProcessStatus.NEW, ProcessStatus.PROCESSING, sessionId);
+
         ReservationDto reservation = databaseRepository.loadReservationOrThrow(pk);
-
-        // todo fail if someone else locked it already - watch for races
-
-        reservation.setStatus(ProcessStatus.PROCESSING);
-        reservation.setProcessed(new Date());
-        databaseRepository.saveReservation(reservation);
-        return reservation;
+        if (reservation.getStatus() == ProcessStatus.PROCESSING && sessionId.equals(reservation.getSession())) {
+            // we got it
+            return reservation;
+        } else {
+            throw new ConcurrentLockError();
+        }
     }
 
     public void releaseAndPutBack(String pk) {
         ReservationDto reservation = databaseRepository.loadReservationOrThrow(pk);
         reservation.setStatus(ProcessStatus.NEW);
+        reservation.setSession(null);
         databaseRepository.saveReservation(reservation);
     }
 

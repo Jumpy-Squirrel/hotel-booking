@@ -1,5 +1,6 @@
 package info.rexis.hotelbooking.web;
 
+import info.rexis.hotelbooking.repositories.database.exceptions.ConcurrentLockError;
 import info.rexis.hotelbooking.services.ReservationService;
 import info.rexis.hotelbooking.services.config.HotelRoomProperties;
 import info.rexis.hotelbooking.services.dto.ProcessStatus;
@@ -10,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -49,8 +52,9 @@ public class WebHotelController {
     @GetMapping(PAGE_HOTEL_FORM)
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String showFormPage(@RequestParam(name = "pk") String pk,
+                               HttpSession session,
                                Model model) {
-        ReservationDto reservation = reservationService.fetchAndLockForProcessing(pk);
+        ReservationDto reservation = reservationService.fetchAndLockForProcessingOrThrow(pk, session.getId());
 
         reservationMapper.modelFromReservation(model, reservation, reservationService.getHotelRoomProperties());
         model.addAttribute("pk", reservation.getPk());
@@ -69,6 +73,12 @@ public class WebHotelController {
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     public String resetAndShowListPage(@RequestParam(name = "pk") String pk, Model model) {
         reservationService.releaseAndPutBack(pk);
+        return showListPage(model);
+    }
+
+    @ExceptionHandler(ConcurrentLockError.class)
+    public String showListPageWithErrorMessage(Model model) {
+        model.addAttribute("lockingerror", "show");
         return showListPage(model);
     }
 

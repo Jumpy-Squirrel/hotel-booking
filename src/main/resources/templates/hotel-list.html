@@ -22,6 +22,9 @@
 
     <div class="container-fluid" id="hotellist">
         <form action="hotel-form" method="post">
+            <div class="alert alert-warning" data-th-if="${lockingerror == 'show'}">
+                <strong>Fehler!</strong> Dieser Eintrag wird oder wurde bereits von einem anderen Benutzer bearbeitet. Bitte wählen Sie einen neuen aus.
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>

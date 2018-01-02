@@ -58,4 +58,6 @@ public class ReservationDto {
     private ProcessStatus status = ProcessStatus.NEW;
 
     private Date processed;
+
+    private String session;
 }

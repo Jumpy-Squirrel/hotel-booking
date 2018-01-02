@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -51,6 +52,10 @@ public class DatabaseRepository {
 
     public List<ReservationDto> findEarliest20ByStatus(ProcessStatus status) {
         return reservationRepository.findTop20ByStatusOrderByPk(status);
+    }
+
+    public void lockReservationForProcessingOrNull(String pk, ProcessStatus oldstatus, ProcessStatus newstatus, String sessionId) {
+        reservationRepository.lockReservationForProcessing(pk, oldstatus, newstatus, sessionId, new Date());
     }
 
     protected int comparatorReverseSortedByPk(ReservationDto a, ReservationDto b) {
