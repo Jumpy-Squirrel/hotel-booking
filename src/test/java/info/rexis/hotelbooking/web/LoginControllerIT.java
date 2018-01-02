@@ -51,6 +51,6 @@ public class LoginControllerIT {
     public void shouldLogoutUserAndShowLoginFormAgain() throws Exception {
         shouldLoginUser();
 
-        helper.performGETAndExpectRedirectToUrlContaining(REQUEST_PATH_LOGOUT, "/login");
+        helper.performGETAndExpectOkContaining(REQUEST_PATH_LOGOUT, "id=\"loginpage\"", false);
     }
 }

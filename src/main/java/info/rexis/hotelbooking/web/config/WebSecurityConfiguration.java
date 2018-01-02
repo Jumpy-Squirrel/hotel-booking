@@ -1,9 +1,9 @@
 package info.rexis.hotelbooking.web.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,15 +15,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Order(ManagementServerProperties.BASIC_AUTH_ORDER + 1)
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/login", "/logout").permitAll()
                 .antMatchers("/", "/main", "/reservation-form", "/reservation-show", "/css/**", "/fonts/**", "/js/**", "/images/**", "/locales/**").permitAll()
                 .antMatchers("/hotel/**").hasAnyRole("ADMIN", "USER")
-                .anyRequest().hasRole("ADMIN")
+                .antMatchers("/**").hasRole("ADMIN")
                 .and()
                 .formLogin()
                 .loginPage("/login")

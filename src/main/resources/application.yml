@@ -29,6 +29,12 @@ info:
   version: 0.1.0
   os: ${os.name}
 
+management:
+  context-path: /actuator
+  security:
+    enabled: true
+    roles: ADMIN
+
 logging:
   ignorepattern: '(\/hotel-booking)?\/(css|fonts|images|js|locales)\/.*'
   level:
