@@ -36,11 +36,14 @@ public class WebViewControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
-    private static final String REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION = "?id=1&token=lala";
-    private static final String REQUEST_PATH_MISSING_PARAMETER = "?id=2";
-    private static final String REQUEST_PATH_FOR_CLIENT_ERROR = "?id=3&token=" + MockRegsysFeignClientConfig.CLIENTERROR_TOKEN;
-    private static final String REQUEST_PATH_FOR_SERVER_ERROR = "?id=3&token=" + MockRegsysFeignClientConfig.SERVERERROR_TOKEN;
-    private static final String REQUEST_PATH_FOR_DENY = "?id=4&token=" + MockRegsysFeignClientConfig.INVALID_TOKEN;
+    private static final String REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION = "/?id=1&token=lala";
+    private static final String REQUEST_PATH_MISSING_PARAMETER = "/?id=2";
+    private static final String REQUEST_PATH_FOR_CLIENT_ERROR = "/?id=3&token=" + MockRegsysFeignClientConfig.CLIENTERROR_TOKEN;
+    private static final String REQUEST_PATH_FOR_SERVER_ERROR = "/?id=3&token=" + MockRegsysFeignClientConfig.SERVERERROR_TOKEN;
+    private static final String REQUEST_PATH_FOR_DENY = "/?id=4&token=" + MockRegsysFeignClientConfig.INVALID_TOKEN;
+    private static final String PAGE_MAIN = "/main";
+    private static final String PAGE_FORM = "/reservation-form";
+    private static final String PAGE_SHOW = "/reservation-show";
 
     @Test
     public void shouldReturnMainPage() throws Exception {
@@ -52,7 +55,7 @@ public class WebViewControllerIT {
     @Test(expected = RegsysServerError.class)
     public void shouldReturnErrorPageWhenRegsysSaysServerError() throws Exception {
         try {
-            mockMvc.perform(get("/" + REQUEST_PATH_FOR_SERVER_ERROR).header("Accept", "text/html"));
+            mockMvc.perform(get(REQUEST_PATH_FOR_SERVER_ERROR).header("Accept", "text/html"));
         } catch (NestedServletException nested) {
             throw (Exception) nested.getCause();
         }
@@ -63,7 +66,7 @@ public class WebViewControllerIT {
     @Test(expected = RegsysClientError.class)
     public void shouldReturnErrorPageWhenRegsysSaysNotOk() throws Exception {
         try {
-            mockMvc.perform(get("/" + REQUEST_PATH_FOR_CLIENT_ERROR).header("Accept", "text/html"));
+            mockMvc.perform(get(REQUEST_PATH_FOR_CLIENT_ERROR).header("Accept", "text/html"));
         } catch (NestedServletException nested) {
             throw (Exception) nested.getCause();
         }
@@ -82,61 +85,61 @@ public class WebViewControllerIT {
 
     @Test
     public void shouldReturnSessionLostPageIfSessionWithoutInfo() throws Exception {
-        shouldReturnPageWithGet(WebViewController.PAGE_MAIN, "id=\"sessionlost\"");
+        shouldReturnPageWithGet(PAGE_MAIN, "id=\"sessionlost\"");
     }
 
     @Test
     public void shouldReturnMainPageAgainWithoutParamsIfSessionHasInfo() throws Exception {
         obtainSession(REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION);
-        shouldReturnPageWithGet(WebViewController.PAGE_MAIN, "id=\"mainpage\"", session);
+        shouldReturnPageWithGet(PAGE_MAIN, "id=\"mainpage\"", session);
     }
 
     @Test
     public void shouldReturnReservationFormPage() throws Exception {
         obtainSession(REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION);
-        shouldReturnPageWithGet(WebViewController.PAGE_FORM, "id=\"formpage\"", session);
+        shouldReturnPageWithGet(PAGE_FORM, "id=\"formpage\"", session);
     }
 
     @Test
     public void shouldReturnForbiddenIfReservationFormWithoutInfoInSession() throws Exception {
-        shouldReturnPageWithGet(WebViewController.PAGE_FORM, "id=\"sessionlost\"");
+        shouldReturnPageWithGet(PAGE_FORM, "id=\"sessionlost\"");
     }
 
     @Test
     public void shouldDenyWithoutCsrfToken() throws Exception {
         obtainSession(REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION);
-        shouldDenyPostWithoutCsrfToken(WebViewController.PAGE_SHOW);
+        shouldDenyPostWithoutCsrfToken(PAGE_SHOW);
     }
 
     @Test
     public void shouldReturnReservationShowPage() throws Exception {
         obtainSession(REQUEST_PATH_THAT_WILL_PUT_INFO_IN_SESSION);
-        obtainSessionAndCsrfToken(WebViewController.PAGE_FORM, session);
-        shouldReturnPageWithPost(WebViewController.PAGE_SHOW, "id=\"showpage\"");
+        obtainSessionAndCsrfToken(PAGE_FORM, session);
+        shouldReturnPageWithPost(PAGE_SHOW, "id=\"showpage\"");
     }
 
     @Test
     public void shouldBringBackEnteredInfoOnSecondVisit() throws Exception {
-        obtainSession("?id=2&token=databasetest");
-        obtainSessionAndCsrfToken(WebViewController.PAGE_FORM, session);
-        shouldReturnPageWithPost(WebViewController.PAGE_SHOW, "id=\"showpage\"", "rewuilgfaf");
+        obtainSession("/?id=2&token=databasetest");
+        obtainSessionAndCsrfToken(PAGE_FORM, session);
+        shouldReturnPageWithPost(PAGE_SHOW, "id=\"showpage\"", "rewuilgfaf");
 
-        obtainSession("?id=2&token=databasetest");
-        shouldReturnPageWithGet(WebViewController.PAGE_FORM, "value=\"rewuilgfaf\"", session);
+        obtainSession("/?id=2&token=databasetest");
+        shouldReturnPageWithGet(PAGE_FORM, "value=\"rewuilgfaf\"", session);
     }
 
     private String csrftoken;
     private HttpSession session;
 
     private void obtainSession(String requestPath) throws Exception {
-        MvcResult result = mockMvc.perform(get("/" + requestPath))
+        MvcResult result = mockMvc.perform(get(requestPath))
                 .andExpect(status().isOk())
                 .andReturn();
         session = result.getRequest().getSession();
     }
 
     private void obtainSessionAndCsrfToken(String requestPath, HttpSession httpSession) throws Exception {
-        MvcResult result = mockMvc.perform(get("/" + requestPath).session((MockHttpSession) httpSession))
+        MvcResult result = mockMvc.perform(get(requestPath).session((MockHttpSession) httpSession))
                 .andExpect(status().isOk())
                 .andReturn();
         // need to do this because the csrf token also changes the session
@@ -155,25 +158,25 @@ public class WebViewControllerIT {
     }
 
     private void shouldReturnPageWithGet(String requestPath, String expectedExcerpt) throws Exception {
-        mockMvc.perform(get("/" + requestPath).header("Accept", "text/html"))
+        mockMvc.perform(get(requestPath).header("Accept", "text/html"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(CoreMatchers.containsString(expectedExcerpt)));
     }
 
     private void shouldReturn4xxWithGet(String requestPath) throws Exception {
-        mockMvc.perform(get("/" + requestPath).header("Accept", "text/html"))
+        mockMvc.perform(get(requestPath).header("Accept", "text/html"))
                 .andExpect(status().is4xxClientError());
     }
 
     private void shouldReturnPageWithGet(String requestPath, String expectedExcerpt, HttpSession httpSession) throws Exception {
-        mockMvc.perform(get("/" + requestPath).session((MockHttpSession) httpSession).header("Accept", "text/html"))
+        mockMvc.perform(get(requestPath).session((MockHttpSession) httpSession).header("Accept", "text/html"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(CoreMatchers.containsString(expectedExcerpt)));
     }
 
     private void shouldReturnPageWithPost(String requestPath, String expectedExcerpt, String name3value) throws Exception {
         mockMvc.perform(
-                post("/" + requestPath)
+                post(requestPath)
                         .param("_csrf", csrftoken)
                         .param("roomtype", "1")
                         .param("name3", name3value)
@@ -189,7 +192,7 @@ public class WebViewControllerIT {
 
     private void shouldDenyPostWithoutCsrfToken(String requestPath) throws Exception {
         mockMvc.perform(
-                post("/" + WebViewController.PAGE_SHOW)
+                post(requestPath)
                         .session((MockHttpSession) session)
         )
                 .andExpect(status().isForbidden());
