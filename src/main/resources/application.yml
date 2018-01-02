@@ -38,6 +38,6 @@ management:
 logging:
   ignorepattern: '(\/hotel-booking)?\/(css|fonts|images|js|locales)\/.*'
   level:
-    info.rexis.hotelbooking.web.config.RegexedRequestLoggingFilter: DEBUG
+    info.rexis.hotelbooking.web.logging.RegexedRequestLoggingFilter: DEBUG
     info.rexis.hotelbooking.repositories.regsys.feign.RegsysFeignClient: DEBUG
     info.rexis.hotelbooking.web.AppErrorController: INFO
