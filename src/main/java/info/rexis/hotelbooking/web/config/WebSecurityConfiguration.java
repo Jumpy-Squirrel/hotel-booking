@@ -24,11 +24,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().hasRole("ADMIN")
                 .and()
                 .formLogin()
-                // .loginPage("/login")
+                .loginPage("/login")
                 .defaultSuccessUrl("/hotel/hotel-list")
                 .failureUrl("/login?error=true")
                 .and()
-                .logout().logoutSuccessUrl("/login");
+                .logout().logoutUrl("/logout").logoutSuccessUrl("/login");
     }
 
     @Bean

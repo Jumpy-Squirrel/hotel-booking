@@ -1,21 +1,65 @@
-<html>
-<head></head>
-<body>
-<h1>Login</h1>
-<form name='f' action="login" method='POST'>
-    <table>
-        <tr>
-            <td>User:</td>
-            <td><input type='text' name='username' value=''></td>
-        </tr>
-        <tr>
-            <td>Password:</td>
-            <td><input type='password' name='password' /></td>
-        </tr>
-        <tr>
-            <td><input name="submit" type="submit" value="submit" /></td>
-        </tr>
-    </table>
-</form>
+<!DOCTYPE html>
+<html data-th-lang="de">
+<head>
+    <title>Login</title>
+    <link data-th-replace="thymeleaf-fragments :: styling-and-scripts-in-header"/>
+</head>
+<body onload='document.f.username.focus();'>
+
+<div class="container-fluid">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <span class="navbar-brand">Login</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid" id="loginpage">
+        <div class="well well-sm">
+            <form action="login" method="post" name="f" class="form-horizontal">
+                <div class="row" style="margin-top: 5%; margin-bottom: 5%">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-8">
+                        <p data-th-unless="${loginerror == 'true'}" id="firsttimemessage"><b>Bitte loggen Sie sich ein...</b></p>
+                        <p data-th-if="${loginerror == 'true'}" id="failuremessage"><b>Falscher Benutzername oder falsches Passwort! Bitte erneut versuchen...</b></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-1"></div>
+                    <label class="control-label col-xs-2" for="username">Benutzername:</label>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-4">
+                        <input class="form-control" id="username" name="username" type="text" placeholder="Benutzername" value=""/>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-1"></div>
+                    <label class="control-label col-xs-2" for="password">Passwort:</label>
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-4">
+                        <input class="form-control" id="password" name="password" type="password" placeholder="Passwort" value=""/>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <input type="hidden" data-th-name="${_csrf.parameterName}" data-th-value="${_csrf.token}"/>
+                        <button type="submit" name="submit" id="submitbutton" class="btn btn-primary active" value="Login">Einloggen!</button>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div class="row" style="margin-top: 5%; margin-bottom: 5%">
+                    <div class="col-xs-12"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <link data-th-replace="thymeleaf-fragments :: page-footer"/>
+</div>
+
 </body>
 </html>
