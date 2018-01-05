@@ -11,4 +11,5 @@ public class RegsysInfoResponse {
     private String city;
     private String country;
     private String email;
+    private String phone;
 }

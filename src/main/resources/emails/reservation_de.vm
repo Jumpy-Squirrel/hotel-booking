@@ -17,6 +17,7 @@ Abreise:    $r.departure
             $r.city1
             $r.country1
             $r.email1
+            $r.phone1
 
 #if ($r.roomsize > 1)##
 2.Person:
@@ -26,6 +27,7 @@ Abreise:    $r.departure
             $r.city2
             $r.country2
             $r.email2
+            $r.phone2
 #else##
             (Angaben nicht verfügbar)
 #end##
@@ -39,6 +41,7 @@ Abreise:    $r.departure
             $r.city3
             $r.country3
             $r.email3
+            $r.phone3
 #else##
              (Angaben nicht verfügbar)
 #end##

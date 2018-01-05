@@ -100,5 +100,6 @@ public class ReservationService {
         reservation.setCity1(personalInfo.getCity());
         reservation.setCountry1(personalInfo.getCountry());
         reservation.setEmail1(personalInfo.getEmail());
+        reservation.setPhone1(personalInfo.getPhone());
     }
 }

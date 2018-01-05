@@ -13,4 +13,5 @@ public class PersonalInfoDto {
     private String city;
     private String country;
     private String email;
+    private String phone;
 }

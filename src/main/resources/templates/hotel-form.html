@@ -112,6 +112,19 @@
             </div>
         </div>
         <div class="row">
+            <p class="col-xs-2" align="right" data-th-text="#{form.phone}">form.phone</p>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-3 firstpersoncolumn">
+                <p data-th-text="${phone1}">phone1</p>
+            </div>
+            <div class="col-xs-3 secondpersoncolumn">
+                <p data-th-if="${roomsize != '1'}" data-th-text="${phone2}">phone2</p>
+            </div>
+            <div class="col-xs-3 thirdpersoncolumn">
+                <p data-th-if="${roomsize == '3'}" data-th-text="${phone3}">phone3</p>
+            </div>
+        </div>
+        <div class="row">
             <p class="col-xs-12"></p>
         </div>
         <div class="row">

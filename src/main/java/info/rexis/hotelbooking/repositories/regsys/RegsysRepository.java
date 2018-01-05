@@ -44,6 +44,7 @@ public class RegsysRepository {
                 .city(response.getCity())
                 .country(response.getCountry())
                 .email(response.getEmail())
+                .phone(response.getPhone())
                 .build();
     }
 }

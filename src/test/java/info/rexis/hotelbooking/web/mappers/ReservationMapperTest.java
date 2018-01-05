@@ -30,9 +30,9 @@ public class ReservationMapperTest {
 
     private ReservationDto constructReservation() {
         return new ReservationDto(3,
-                "name1", "street1", "city1", "country1", "email1",
-                "name2", "street2", "city2", "country2", "email2",
-                "name3", "street3", "city3", "country3", "email3",
+                "name1", "street1", "city1", "country1", "email1", "phone1",
+                "name2", "street2", "city2", "country2", "email2", "phone2",
+                "name3", "street3", "city3", "country3", "email3", "phone3",
                 "dd.mm.yyyy", "20.08.2018", "27.08.2018", 2, "comments", "yes",
                 17, "token", "the_pk", ProcessStatus.NEW, null, null);
     }
@@ -54,9 +54,9 @@ public class ReservationMapperTest {
 
         Model expected = new ExtendedModelMap();
         Arrays.stream(new String[] {
-                "name1", "street1", "city1", "country1", "email1",
-                "name2", "street2", "city2", "country2", "email2",
-                "name3", "street3", "city3", "country3", "email3",
+                "name1", "street1", "city1", "country1", "email1", "phone1",
+                "name2", "street2", "city2", "country2", "email2", "phone2",
+                "name3", "street3", "city3", "country3", "email3", "phone3",
                 "comments"
         }).forEach(v -> expected.addAttribute(v, v));
         expected.addAttribute("roomsize", "3");
