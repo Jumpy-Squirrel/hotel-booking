@@ -27,7 +27,7 @@ Departure:   $r.departure
              $r.city2
              $r.country2
              $r.email2
-             $r.phone3
+             $r.phone2
 #else##
              (info not available)
 #end##
