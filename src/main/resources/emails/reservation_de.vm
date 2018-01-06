@@ -12,22 +12,22 @@ Ankunft:    $r.arrival
 Abreise:    $r.departure
 
 1.Person und Hauptkontakt:
-            $r.name1
-            $r.street1
-            $r.city1
-            $r.country1
-            $r.email1
-            $r.phone1
+            $!r.name1
+            $!r.street1
+            $!r.city1
+            $!r.country1
+            $!r.email1
+            $!r.phone1
 
 #if ($r.roomsize > 1)##
 2.Person:
 #if ("$r.name2" != "")##
-            $r.name2
-            $r.street2
-            $r.city2
-            $r.country2
-            $r.email2
-            $r.phone2
+            $!r.name2
+            $!r.street2
+            $!r.city2
+            $!r.country2
+            $!r.email2
+            $!r.phone2
 #else##
             (Angaben nicht verfügbar)
 #end##
@@ -36,20 +36,20 @@ Abreise:    $r.departure
 #if ($r.roomsize > 2)##
 3. Person:
 #if ("$r.name3" != "")##
-            $r.name3
-            $r.street3
-            $r.city3
-            $r.country3
-            $r.email3
-            $r.phone3
+            $!r.name3
+            $!r.street3
+            $!r.city3
+            $!r.country3
+            $!r.email3
+            $!r.phone3
 #else##
              (Angaben nicht verfügbar)
 #end##
 
 #end##
-#if ("$r.comments" != "")##
+#if ("$!r.comments" != "")##
 Weitere Kommentare:
-$r.comments
+$!r.comments
 
 #end##
 Vielen Dank!
