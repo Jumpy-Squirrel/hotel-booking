@@ -172,9 +172,29 @@ function isDisclaimerAccepted() {
     return disclaimer_ok;
 }
 
+function getCommentLength() {
+    var value = $("#comments").val();
+    value = "" + value;
+    return value.length;
+}
+
+function getCommentLimit() {
+    return 2000;
+}
+
+function isCommentNotTooLong() {
+    var comments_ok = (getCommentLength() <= getCommentLimit());
+    fieldErrorMarker('#comments_error', comments_ok);
+    return comments_ok;
+}
+
 function canSubmit() {
-    return areDatesOk()
-        && isDisclaimerAccepted();
+    var datesOk = areDatesOk();
+    var disclaimerOk = isDisclaimerAccepted();
+    var commentsOk = isCommentNotTooLong();
+    return datesOk
+        && disclaimerOk
+        && commentsOk;
 }
 
 function preventSubmitUntilConfirmed() {
@@ -219,6 +239,16 @@ function switchSubmitOnChangedDates() {
     });
 }
 
+function switchSubmitOnCommentChange() {
+    var commentField = $("#comments");
+    commentField.keyup(function() {
+        potentialChangeInSubmitState();
+    });
+    commentField.change(function() {
+        potentialChangeInSubmitState();
+    });
+}
+
 $(document).ready(function() {
     disableClickOnNavbarLinks();
 
@@ -240,6 +270,7 @@ $(document).ready(function() {
 
         switchSubmitOnConfirm();
         switchSubmitOnChangedDates();
+        switchSubmitOnCommentChange();
 
         potentialChangeInSubmitState();
     }
