@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Index;
@@ -47,6 +48,7 @@ public class ReservationDto {
 
     private int roomtype;
 
+    @Column(length = 8000)
     private String comments;
 
     private String understood;

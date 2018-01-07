@@ -23,7 +23,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
 
 info:
   version: 0.1.0
