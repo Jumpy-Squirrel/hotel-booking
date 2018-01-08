@@ -11,10 +11,6 @@ public class MailtoLinkBuilder {
         try {
             String encodedBody = urlEncodeUtf8(emailDto.getBody());
             String encodedSubject = urlEncodeUtf8(emailDto.getSubject());
-            if (emailDto.getBody().contains("SWITCH_LINK_20")) {
-                encodedBody = encodedBody.replaceAll("\\+", "%20");
-                encodedSubject = encodedSubject.replaceAll("\\+", "%20");
-            }
             return "mailto:" + emailDto.getRecipient() + "?subject=" + encodedSubject + "&body=" + encodedBody;
         } catch (Exception ignore) {
             // ok, we won't offer the link in this case
@@ -23,6 +19,6 @@ public class MailtoLinkBuilder {
     }
 
     protected String urlEncodeUtf8(String value) throws UnsupportedEncodingException {
-        return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
+        return URLEncoder.encode(value, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20");
     }
 }
