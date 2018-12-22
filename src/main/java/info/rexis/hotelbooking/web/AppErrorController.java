@@ -3,16 +3,15 @@ package info.rexis.hotelbooking.web;
 import info.rexis.hotelbooking.web.logging.RegexedRequestLoggingFilter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.boot.autoconfigure.web.ErrorAttributes;
-import org.springframework.boot.autoconfigure.web.ErrorController;
+import org.springframework.boot.web.servlet.error.ErrorAttributes;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,9 +38,9 @@ public class AppErrorController implements ErrorController {
      * HTML Error View.
      */
     @RequestMapping(value = ERROR_PATH, produces = {MediaType.TEXT_HTML_VALUE})
-    public ModelAndView errorHtml(HttpServletRequest request) {
+    public ModelAndView errorHtml(HttpServletRequest request, WebRequest webRequest) {
         logger.warn(requestLoggingFilter.createErrorMessage(request));
-        return new ModelAndView("error", getErrorAttributes(request, false));
+        return new ModelAndView("error", getErrorAttributes(webRequest, false));
     }
 
     /**
@@ -50,9 +49,9 @@ public class AppErrorController implements ErrorController {
     @RequestMapping(value = ERROR_PATH, produces = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.TEXT_XML_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> error(HttpServletRequest request, WebRequest webRequest) {
         logger.warn(requestLoggingFilter.createErrorMessage(request));
-        Map<String, Object> body = getErrorAttributes(request, false);
+        Map<String, Object> body = getErrorAttributes(webRequest, false);
         HttpStatus status = getStatus(request);
         return new ResponseEntity<>(body, status);
     }
@@ -62,10 +61,8 @@ public class AppErrorController implements ErrorController {
         return ERROR_PATH;
     }
 
-    private Map<String, Object> getErrorAttributes(HttpServletRequest request,
-                                                   boolean includeStackTrace) {
-        RequestAttributes requestAttributes = new ServletRequestAttributes(request);
-        return this.errorAttributes.getErrorAttributes(requestAttributes, includeStackTrace);
+    private Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {
+        return this.errorAttributes.getErrorAttributes(webRequest, includeStackTrace);
     }
 
     protected HttpStatus getStatus(HttpServletRequest request) {

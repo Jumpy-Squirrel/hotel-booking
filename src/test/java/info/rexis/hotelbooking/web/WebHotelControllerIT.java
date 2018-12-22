@@ -47,8 +47,7 @@ public class WebHotelControllerIT {
 
     @Test
     public void shouldProtectHotelDonePost() {
-        // csrf protection gets to it first
-        shouldBeForbidden("/hotel/hotel-done", "text/html", HttpMethod.POST);
+        shouldRedirectToLogin("/hotel/hotel-done", "text/html", HttpMethod.POST);
     }
 
     private void shouldRedirectToLogin(String url, String acceptheader, HttpMethod method) {
@@ -56,12 +55,6 @@ public class WebHotelControllerIT {
 
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
         Assertions.assertThat(response.getHeaders().getLocation().getPath()).contains("/login");
-    }
-
-    private void shouldBeForbidden(String url, String acceptheader, HttpMethod method) {
-        ResponseEntity<String> response = template.exchange(url, method, new HttpEntity<>(headers(acceptheader)), String.class);
-
-        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
 
     private HttpHeaders headers(String accept) {

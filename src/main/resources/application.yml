@@ -4,7 +4,8 @@ security:
 
 server:
   port: 8081
-  context-path: /hotel-booking
+  servlet:
+    context-path: /hotel-booking
   ssl:
     enabled: false
   tomcat:
@@ -24,16 +25,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  main:
+    allow-bean-definition-overriding: true
 
 info:
   version: 0.1.0
   os: ${os.name}
 
 management:
-  context-path: /actuator
-  security:
-    enabled: true
-    roles: ADMIN
+  endpoints:
+    web:
+      base-path: /actuator
 
 logging:
   ignorepattern: '(\/hotel-booking)?\/(css|fonts|images|js|locales)\/.*'

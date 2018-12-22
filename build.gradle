@@ -2,7 +2,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 buildscript {
 	ext {
-		springBootVersion = '1.5.9.RELEASE'
+        springBootVersion = '2.1.1.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -17,6 +17,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jacoco'
 apply plugin: 'checkstyle'
 apply plugin: 'org.owasp.dependencycheck'
@@ -32,52 +33,43 @@ compileJava.options.encoding = 'UTF-8'
 
 repositories {
 	mavenCentral()
-    // for jacoco snapshots
-    maven() {
-        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    // needed until spring cloud releases openfeign-starter 2.1.0
+    maven {
+        url 'https://maven.springframework.org/milestone'
     }
 }
 
 jacoco {
-	// supports filtering out @generated code from lombok
-	toolVersion = '0.7.10-SNAPSHOT'
+	toolVersion = '0.8.2'
 }
 
 check.dependsOn jacocoTestReport
 
-sourceSets {
-    // select this source set in your run configuration to be able to start the war in IntelliJ idea
-    ideaWorkaround {
-        java {
-            compileClasspath += sourceSets.main.compileClasspath
-            runtimeClasspath += sourceSets.main.runtimeClasspath
-            compileClasspath += main.output
-            runtimeClasspath += main.output
-        }
-    }
-}
-
 dependencies {
     compileOnly('org.projectlombok:lombok')
-	compile('org.springframework.boot:spring-boot-starter-actuator')
-	compile('org.springframework.boot:spring-boot-starter-security')
-	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
-	compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.apache.velocity:velocity:1.7')
-    compile('org.springframework.cloud:spring-cloud-starter-openfeign:1.4.0.RELEASE')
-    compile('io.github.openfeign:feign-httpclient:9.5.1')
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation('org.springframework.boot:spring-boot-starter-actuator')
+    implementation('org.springframework.boot:spring-boot-starter-security')
+    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.apache.velocity:velocity:1.7')
+    implementation('org.springframework.cloud:spring-cloud-starter-openfeign:2.1.0.RC2')
+    implementation('io.github.openfeign:feign-httpclient:9.5.1')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('org.springframework.boot:spring-boot-starter-jdbc')
     runtime('mysql:mysql-connector-java')
+
+    // TODO REMOVE ME AGAIN WHEN DONE DEVELOPING
+    runtime('com.h2database:h2')
+
+    // implementation('org.springframework.boot:spring-boot-starter-tomcat')
     providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 	compileOnly('org.springframework.boot:spring-boot-configuration-processor')
- 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.springframework.security:spring-security-test')
-    testCompile("com.h2database:h2")
-    testCompile('org.powermock:powermock:1.6.5')
-    testCompile('org.powermock:powermock-module-junit4:1.6.5')
-    testCompile('org.powermock:powermock-api-mockito:1.6.5')
-    testCompile('org.powermock:powermock-api-mockito-common:1.6.5')
-    ideaWorkaroundCompile('org.springframework.boot:spring-boot-starter-tomcat')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.security:spring-security-test')
+    testImplementation('com.h2database:h2')
+    testImplementation('org.powermock:powermock-core:2.0.0-RC.4')
+    testImplementation('org.powermock:powermock-module-junit4:2.0.0-RC.4')
+    testImplementation('org.powermock:powermock-api-mockito2:2.0.0-RC.4')
 }
 
 jar {
@@ -97,8 +89,8 @@ checkstyle {
     configFile = rootProject.file('config/checkstyle/checkstyle.xml')
 }
 
-bootRepackage {
-    executable = true
+bootWar {
+    // executable = true
     excludeDevtools = true
 }
 

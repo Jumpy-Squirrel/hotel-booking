@@ -6,18 +6,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 @Configuration
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
+public class WebMvcConfiguration implements WebMvcConfigurer {
     private final LocaleChangeInterceptor localeChangeInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor);
-        super.addInterceptors(registry);
     }
 
     @Override
@@ -26,7 +25,7 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter {
                 favorParameter(true).
                 parameterName("format").
                 ignoreAcceptHeader(false).
-                useJaf(true).
+                useRegisteredExtensionsOnly(false).
                 defaultContentType(MediaType.TEXT_HTML);
     }
 }
