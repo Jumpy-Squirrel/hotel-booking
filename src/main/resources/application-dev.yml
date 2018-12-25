@@ -25,7 +25,7 @@ hotelinfo:
   stichwort: Demo Convention
 
 regsys:
-  uri: http://localhost:8080/regsys/service/room-booking-api
+  uri: http://localhost:8080/regsys
   auth: demoAuth
   relaxedSsl: true
 
